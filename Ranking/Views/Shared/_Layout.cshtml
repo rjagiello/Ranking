@@ -1,0 +1,81 @@
+﻿@using Ranking.Infrastructure
+@{
+    string[] leaders = Helpers.Leaders();
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>League 2018</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" /> <!--3.3.7-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="~/Content/Site.css" />
+</head>
+<body>
+    @Html.Partial("_LoginPartial")
+
+    <div class="container-fluid text-center">
+        <div class="row">
+            <div style="text-align:left; font-size:large;" class="col-sm-2 sidenav">
+                @if (Helpers.IsAnyMatch() && leaders != null)
+                {
+                    <h3><b>Liderzy</b></h3>
+                    <p><!--<img src="~/Content/Images/medal1.png"--> /> @leaders[0]</p>
+                    <p><!--<img src="~/Content/Images/medal2.png" />--> @leaders[1]</p>
+                    <p><!--<img src="~/Content/Images/medal3.png" />--> @leaders[2]</p>
+                    <hr />
+                    <h3><b>Król strzelców</b></h3>
+                    <p>@Helpers.KingOfShooters()</p>
+                }
+            </div>
+            <div class="col-sm-8 text-left">
+                @RenderBody()
+                <script>
+                    var element = document.getElementById("actives").children;
+                    var i;
+                    for(i = 0; i<element.length; i++)
+                    {
+                        if(element[i].classList.contains("active"))
+                            element[i].classList.remove("active")
+                    }
+                    switch ("@ViewBag.Title") {
+                        case "Ranking":
+                            element[0].classList.add("active");
+                            break;
+                        case "Druzyny":
+                            element[1].classList.add("active");
+                            break;
+                        case "Zwodnicy":
+                            element[2].classList.add("active");
+                            break;
+                        case "Mecze":
+                            element[3].classList.add("active");
+                            break;
+                        case "Archiwum":
+                            element[4].classList.add("active");
+                            break;
+                        case "Tablica":
+                            element[5].classList.add("active");
+                            break;
+                        case "Regulamin":
+                            element[6].classList.add("active");
+                            break;
+                    }
+                </script>
+            </div>
+            @Html.Partial("_RightSectionLayout")
+        </div>
+    </div>
+    <footer class="container-fluid text-center">
+        <p>Administrator: jagieloradosaw@gmail.com</p>
+        <p>Copyright &copy; 2018</p>
+    </footer>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

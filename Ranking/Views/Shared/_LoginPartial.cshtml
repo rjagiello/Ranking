@@ -1,0 +1,41 @@
+﻿@using Ranking.Infrastructure
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">League</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul id="actives" class="nav navbar-nav">
+                <li class="active"><a href="@Url.Action("Index", "Home")">Ranking</a></li>
+                <li><a href="@Url.Action("TeamList", "Home")">Drużyny</a></li>
+                <li><a href="@Url.Action("MembersList", "Home")">Zawodnicy</a></li>
+                <li><a href="@Url.Action("Index", "Match")">Mecze</a></li>
+                <li><a href="@Url.Action("ArchivesRank", "Home")">Archiwum</a></li>
+                <li><a href="@Url.Action("Index", "Board")">Tablica</a></li>
+                <li><a href="@Url.Action("Regulations", "Home")">Regulamin</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                @if (Helpers.IsAuthenticated() || Helpers.IsFanAuthenticated())
+                {
+                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                    {
+                        <li style="display:block; padding: 15px 15px; color:white;">
+                            @Helpers.UserName() &nbsp;
+                            <a style="color:wheat" href="javascript:document.getElementById('logoutForm').submit()"><span class="glyphicon glyphicon-log-out"></span> Wyloguj</a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li><a href="@Url.Action("LoginIndex", "Account")"><span class="glyphicon glyphicon-log-in"></span> Zaloguj</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -26,7 +26,144 @@ namespace Ranking.Controllers
 
         public ActionResult Index()
         {
+            matchManager.temp();
+
+            List<Rank> ranking;
+
+            if (cache.IsSet(CacheManager.RankingCacheKey))
+                ranking = cache.Get(CacheManager.RankingCacheKey) as List<Rank>;
+            else
+            {
+                ranking = db.Rank.OrderBy(r => r.Position).ToList();
+                cache.Set(CacheManager.RankArchCacheKey, ranking, 1);
+            }
+            foreach (var r in ranking)
+            {
+                r.Ratio = matchManager.GetRatio(r.Won, r.Played);
+                if (r.Ratio < 25)
+                    r.Colour = "red";
+                else if (r.Ratio >= 25 && r.Ratio < 50)
+                    r.Colour = "#ff9900";
+                else if (r.Ratio >= 50 && r.Ratio < 75)
+                    r.Colour = "yellow";
+                else if (r.Ratio >= 75 && r.Ratio < 90)
+                    r.Colour = "#4dff4d";
+                else if (r.Ratio >= 90)
+                    r.Colour = "#009900";
+            }
+            var date = db.RoundDate.SingleOrDefault();
+
+            if (date != null)
+            {
+                ViewBag.Year = date.RoundDatetime.Year;
+                ViewBag.Month = date.RoundDatetime.Month.ToString("D2");
+                ViewBag.Day = date.RoundDatetime.Day.ToString("D2");
+                ViewBag.Hour = date.RoundDatetime.Hour.ToString("D2");
+                ViewBag.Minute = date.RoundDatetime.Minute.ToString("D2");
+            }
+
+            return View(ranking);
+        }
+
+        public ActionResult Regulations()
+        {
             return View();
+        }
+
+        public ActionResult TeamList()
+        {
+            string filePath = Server.MapPath(Url.Content("~/Content/Images"));
+
+            var players = db.Rank.ToList();
+
+            Dictionary<int, string> imagesList;
+
+            if (cache.IsSet(CacheManager.TeamListCacheKey))
+                imagesList = cache.Get(CacheManager.TeamListCacheKey) as Dictionary<int, string>;
+            else
+            {
+                imagesList = new Dictionary<int, string>();
+                foreach (var p in players)
+                {
+                    if (System.IO.File.Exists(filePath + p.Uname + ".png"))
+                        imagesList.Add(p.RankId, p.Uname + ".png");
+                    else
+                        imagesList.Add(p.RankId, "default.png");
+                }
+                cache.Set(CacheManager.TeamListCacheKey, imagesList, 5);
+            }
+            ViewBag.ImageList = imagesList;
+
+            return View(players);
+        }
+
+        public ActionResult ArchivesRank()
+        {
+            List<RankArch> ranks;
+            if (cache.IsSet(CacheManager.RankArchCacheKey))
+                ranks = cache.Get(CacheManager.RankArchCacheKey) as List<RankArch>;
+            else
+            {
+                ranks = db.RankArch.ToList();
+                cache.Set(CacheManager.RankArchCacheKey, ranks, 60);
+            }
+            int[] IdArray = new int[ranks.Count];
+            for (int i = 0; i < ranks.Count; i++)
+            {
+                IdArray[i] = ranks[i].RankArchId;
+            }
+            ViewBag.IdArray = IdArray;
+
+            return View();
+        }
+
+        public ActionResult ArchivesMatches(int id)
+        {
+            var rank = db.RankArch.Find(id);
+            var matches = rank.MatchArched.OrderByDescending(m => m.Date).ToList();
+
+            ViewBag.RoundNumber = rank.RoundNumber;
+            return View(matches);
+        }
+
+        public ActionResult AddToArchive()
+        {
+            var ranking = db.Rank.ToList();
+            rankArchManager.AddToArchive(ranking);
+
+            return RedirectToAction("ArchivesRank");
+        }
+
+        public ActionResult ClearRanking()
+        {
+            rankArchManager.ClearRanking();
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult RankTable(int id)
+        {
+            var rank = db.RankArch.Where(r => r.RankArchId == id).SingleOrDefault();
+
+            var table = rank.Ranks.OrderBy(t => t.Position).ToList();
+
+            ViewBag.From = rank.From.ToShortDateString();
+            ViewBag.To = rank.To.ToShortDateString();
+            ViewBag.RoundNumber = rank.RoundNumber;
+
+            return PartialView("_RankTable", table);
+        }
+
+        public ActionResult MemberList()
+        {
+            var members = db.Member.OrderByDescending(k => k.Goals).ToList();
+            int i = 0;
+            foreach(var m in members)
+            {
+                m.Lp = ++i;
+            }
+
+            return View(members);
         }
     }
 }

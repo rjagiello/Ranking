@@ -223,6 +223,16 @@ namespace Ranking.Infrastructure
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="id"></param>
+        public void DeleteResetPasswordToken(int id)
+        {
+            var user = db.Users.Find(id);
+            user.ResetPasswordToken = null;
+            db.SaveChanges();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
         public bool Login(LoginViewModel user)

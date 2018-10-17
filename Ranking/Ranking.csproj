@@ -129,6 +129,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -148,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\RankContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -161,6 +163,15 @@
     <Compile Include="Infrastructure\MatchManager.cs" />
     <Compile Include="Infrastructure\RankArchManager.cs" />
     <Compile Include="Infrastructure\SessionManager.cs" />
+    <Compile Include="Migrations\201810162119338_InitialCreate.cs" />
+    <Compile Include="Migrations\201810162119338_InitialCreate.Designer.cs">
+      <DependentUpon>201810162119338_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810171634408_first.cs" />
+    <Compile Include="Migrations\201810171634408_first.Designer.cs">
+      <DependentUpon>201810171634408_first.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Board.cs" />
     <Compile Include="Models\Match.cs" />
     <Compile Include="Models\RankArch.cs" />
@@ -181,6 +192,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\_RightSectionLayout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -190,7 +205,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Home\" />
+    <Folder Include="Content\Images\" />
+    <Folder Include="Views\Account\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201810162119338_InitialCreate.resx">
+      <DependentUpon>201810162119338_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810171634408_first.resx">
+      <DependentUpon>201810171634408_first.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

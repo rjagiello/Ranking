@@ -45,7 +45,7 @@ namespace Ranking.ViewModels
         [Required]
         [StringLength(30)]
         [Display(Name = "Nazwa")]
-        public string Nazwa { get; set; }
+        public string Name { get; set; }
         [Required]
         [StringLength(50)]
         [Display(Name = "E-mail")]

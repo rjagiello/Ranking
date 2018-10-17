@@ -1,0 +1,40 @@
+﻿@using Ranking.Infrastructure
+
+<div class="col-sm-2 sidenav">
+    @if (Helpers.IsAuthenticated() && !Helpers.IsNotAccept() && !Helpers.IsNotTwoPlayers())
+    {
+        if (!Helpers.IsAdmin())
+        {
+            <div class="well">
+                <a class="btn btn-default" href="@Url.Action("ChangeData", "UserManage")">Twoje dane</a>
+            </div>
+            <div class="well">
+                <a class="btn btn-default" href="@Url.Action("YourMatches", "UserManage")">Twoje mecze</a>
+            </div>
+            <div class="well">
+                <a class="btn btn-default" href="@Url.Action("Index", "Profile")">Twój profil</a>
+            </div>
+        }
+    }
+    @if (Helpers.IsNotAccept() && !Helpers.IsAdmin())
+    {
+        <div class="well">
+            <p style="color:red">Twoja drużyna czeka na zatwierdzenie</p>
+        </div>
+    }
+    @if (!Helpers.IsNotAccept() && !Helpers.IsAdmin() && Helpers.IsNotTwoPlayers())
+    {
+        <div class="well">
+            <a class="btn btn-default" href="@Url.Action("ChangeData", "UserManage")">Twoje dane</a>
+        </div>
+        <div class="well">
+            <p style="color:red">Musisz dodać minimum 2 zawodników do drużyny (Twoje dane)</p>
+        </div>
+    }
+    @if (Helpers.IsAuthenticated() && Helpers.IsAdmin())
+    {
+        <div class="well">
+            <a class="btn btn-default" href="@Url.Action("Index", "Manage")">Admin Panel</a>
+        </div>
+    }
+</div>

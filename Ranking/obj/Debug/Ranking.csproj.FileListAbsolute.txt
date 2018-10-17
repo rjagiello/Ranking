@@ -48,3 +48,6 @@ C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\bin\System.Web.Help
 C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\bin\System.Web.Mvc.xml
 C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\obj\Debug\Ranking.dll
 C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\obj\Debug\Ranking.pdb
+C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\obj\Debug\Ranking.Migrations.InitialCreate.resources
+C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\obj\Debug\Ranking.csproj.GenerateResource.Cache
+C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\obj\Debug\Ranking.Migrations.first.resources

@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Ranking.Models.Rank>
+@using Ranking.Infrastructure
+@{
+    ViewBag.Title = "Ranking";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script></script> <!--jquery-2.2.1.min.js-->
+<script></script> <!--jquery-ui-1.12.1.min.js-->
+
+<div>
+    @if (Model.Any())
+    {
+        if (Helpers.FinishLeague())
+        {
+            <div style="font-size:larger; margin-top:15px; font-weight:800; color:red;">
+                <p style="text-align:center;">Koniec rundy</p>
+            </div>
+            <div style="text-align:center; font-size:x-large;">
+                <p>Data rozpoczęcia kolejnej rundy: @ViewBag.Year-@ViewBag.Month-@ViewBag.Day</p>
+            </div>
+
+            if (Helpers.IsAdmin())
+            {
+                if (Helpers.IsArchAdded())
+                {
+                    <a href="@Url.Action("AddToArchive", "Home")" class="btn btn-default disabled">Dodaj ranking do archiwum</a>
+                    <a href="@Url.Action("ClearRanking", "Home")" onclick="return confirm('Czy na pewno wyczyścić tabelę?')" class="btn btn-default">Wyczyść tabelę</a>
+                }
+                else
+                {
+                    <a href="@Url.Action("AddToArchive", "Home")" onclick="return confirm('Czy na pewno dodać tabelę do archiwum?')" class="btn btn-default">Dodaj ranking do archiwum</a>
+                    <a href="@Url.Action("ClearRanking", "Home")" class="btn btn-default disabled">Wyczyść tabelę</a>
+                }
+            }
+        }
+        <div style="text-align:center; font-size:xx-large; padding-bottom:10px; margin-top:20px;">
+            <p><b>RANKING</b></p>
+        </div>
+        <table class="table table-hover">
+            <tr style="background-color:#32383e; color:white;">
+                <th scope="col">Pozycja</th>
+                <th scope="col">Drużyna</th>
+                <th scope="col">Wygrane</th>
+                <th scope="col">Przegrane</th>
+                <th scope="col">Rozegrane</th>
+                <th scope="col">Bramki strzelone</th>
+                <th scope="col">Bramki stracone</th>
+                <th scope="col">Punkty</th>
+                <th scope="col">Ratio</th>
+            </tr>
+            @foreach (var rec in Model)
+            {
+                <tr style="background-color:#32383e; color:white;">
+                    <td id="@rec.Position">@rec.Position &nbsp; &nbsp;</td>
+                    <td>@rec.Uname</td>
+                    <td>@rec.Won</td>
+                    <td>@rec.Lost</td>
+                    <td>@rec.Played</td>
+                    <td>@rec.Goals</td>
+                    <td>@rec.LostGoals</td>
+                    <td>@rec.Points</td>
+                    @if (rec.Played != 0)
+                    {
+                        <td style="color:@rec.Colour">@rec.Ratio%</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+</div>
+
+<script>
+    //var img1 = new Image();
+    //var img2 = new Image();
+    //var img3 = new Image();
+    //var td1 = document.getElementById('1');
+    //var td2 = document.getElementById('2');
+    //var td3 = document.getElementById('3');
+
+    //img1.onload = function () {
+    //    td1.appendChild(img1);
+    //};
+    //img2.onload = function () {
+    //    td2.appendChild(img2);
+    //};
+    //img2.onload = function () {
+    //    td3.appendChild(img3);
+    //};
+
+    //img1.src = '/Content/Images/medal1.png'
+    //img2.src = '/Content/Images/medal2.png'
+    //img3.src = '/Content/Images/medal3.png'
+</script>
