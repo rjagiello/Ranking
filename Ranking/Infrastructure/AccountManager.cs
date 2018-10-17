@@ -14,11 +14,13 @@ namespace Ranking.Infrastructure
         private ISessionManager session;
         private LoginState loginState;
         private UserType userType;
+        private DBOperations DB;
 
         public AccountManager(RankContext db, ISessionManager session)
         {
             this.session = session;
             this.db = db;
+            DB = new DBOperations(db);
         }
 
         /// <summary>
@@ -28,13 +30,15 @@ namespace Ranking.Infrastructure
         public void AddUser(dynamic user)
         {
             user.Stat = Status.Registration;
-            if (user is Users)
-            {
-                Users u = user as Users;
-                db.Users.Add(u);
-            }
-            else if (user is Fans)
-                db.Fans.Add(user);
+            //if (user is Users)
+            //{
+            //    Users u = user as Users;
+            //    db.Users.Add(u);
+            //}
+            //else if (user is Fans)
+            //    db.Fans.Add(user);
+            DB.DBAdd(user);
+
             db.SaveChanges();
         }
         /// <summary>
@@ -44,8 +48,8 @@ namespace Ranking.Infrastructure
         /// <param name="MemberName"></param>
         public void AddCaptainToMembers(string UserName, string MemberName)
         {
-            var user = db.Users.Where(u => u.Name == UserName).SingleOrDefault();
-            db.Member.Add(new Member() { MName = MemberName, IsCaptain = true, UserId = user.UserId });
+            var user = DB.GetUserByName(UserName); //db.Users.Where(u => u.Name == UserName).SingleOrDefault();
+            DB.DBAdd(new Member() { MName = MemberName, IsCaptain = true, UserId = user.UserId }); //db.Member.Add(new Member() { MName = MemberName, IsCaptain = true, UserId = user.UserId });
             db.SaveChanges();
         }
         /// <summary>
@@ -54,10 +58,10 @@ namespace Ranking.Infrastructure
         /// <param name="user"></param>
         public void DeleteUser(Users user)
         {
-            var rank = db.Rank.Where(r => r.Uname == user.Name).SingleOrDefault();
-            db.Users.Remove(user);
+            var rank = DB.GetRankByName(user.Name); //db.Rank.Where(r => r.Uname == user.Name).SingleOrDefault();
+            DB.DBRemove(user); //db.Users.Remove(user);
             if (rank != null)
-                db.Rank.Remove(rank);
+                DB.DBRemove(rank);//db.Rank.Remove(rank);
             db.Match.RemoveRange(db.Match.Where(m => m.IsFinished == false && (m.Team1 == user.Name || m.Team2 == user.Name)));
 
             db.SaveChanges();
@@ -68,7 +72,7 @@ namespace Ranking.Infrastructure
         /// <param name="fan"></param>
         public void DeleteFan(Fans fan)
         {
-            db.Fans.Remove(fan);
+            DB.DBRemove(fan);//db.Fans.Remove(fan);
             db.SaveChanges();
         }
        /// <summary>
@@ -78,14 +82,14 @@ namespace Ranking.Infrastructure
         public void AddMember(Member member)
         {
             var name = Helpers.UserName();
-            var user = db.Users.Where(u => u.Name == name).SingleOrDefault();
+            var user = DB.GetUserByName(name); // db.Users.Where(u => u.Name == name).SingleOrDefault();
 
             var newMember = new Member()
             {
                 MName = member.MName,
                 UserId = user.UserId
             };
-            db.Member.Add(newMember);
+            DB.DBAdd(newMember);//db.Member.Add(newMember);
             db.SaveChanges();
 
             user.IsTwoPlayers = user.Members.Count >= 2;
@@ -98,10 +102,10 @@ namespace Ranking.Infrastructure
         /// <param name="member"></param>
         public void DeleteMember(Member member)
         {
-            db.Member.Remove(member);
+            DB.DBRemove(member);//db.Member.Remove(member);
             db.SaveChanges();
 
-            var user = db.Users.Where(u => u.UserId == member.UserId).SingleOrDefault();
+            var user = DB.GetUserById(member.UserId);//db.Users.Where(u => u.UserId == member.UserId).SingleOrDefault();
             user.IsTwoPlayers = user.Members.Count() >= 2;
             db.SaveChanges();
         }
@@ -112,7 +116,7 @@ namespace Ranking.Infrastructure
         public List<Member> GetMembers()
         {
             var name = Helpers.UserName();
-            var user = db.Users.Where(u => u.Name == name).SingleOrDefault();
+            var user = DB.GetUserByName(name); //db.Users.Where(u => u.Name == name).SingleOrDefault();
 
             return user.Members.ToList();
         }
@@ -123,7 +127,7 @@ namespace Ranking.Infrastructure
         /// <returns></returns>
         public bool LimitMembers(string name)
         {
-            var user = db.Users.Where(u => u.Name == name).SingleOrDefault();
+            var user = DB.GetUserByName(name); // db.Users.Where(u => u.Name == name).SingleOrDefault();
             if (user.Members.Count <= 7)
                 return true;
             return false;
@@ -147,7 +151,7 @@ namespace Ranking.Infrastructure
         public void ChangeUserData(UserChangeViewModel User)
         {
             string name = Helpers.UserName();
-            var user = db.Users.Where(u => u.Name == name).SingleOrDefault();
+            var user = DB.GetUserByName(name); // db.Users.Where(u => u.Name == name).SingleOrDefault();
             if(user.Name != User.Name || user.Captain != User.Captain)
             {
                 user.stat = Status.Modificarion;
@@ -172,8 +176,8 @@ namespace Ranking.Infrastructure
         /// <param name="id"></param>
         public void ChangeUserDataFinish(int id)
         {
-            var user = db.Users.Where(u => u.UserId == id).SingleOrDefault();
-            var rank = db.Rank.Where(r => r.Uname == user.Name).SingleOrDefault();
+            var user = DB.GetUserById(id); //db.Users.Where(u => u.UserId == id).SingleOrDefault();
+            var rank = DB.GetRankByName(user.Name); //db.Rank.Where(r => r.Uname == user.Name).SingleOrDefault();
             var match = db.Match.Where(m => m.Team1 == user.Name || m.Team2 == user.Name).ToList();
 
             string name = user.Name;
@@ -212,7 +216,7 @@ namespace Ranking.Infrastructure
         /// <param name="id"></param>
         public void SetResetPasswordToken(int id)
         {
-            var user = db.Users.Find(id);
+            var user = DB.GetUserById(id); // db.Users.Find(id);
 
             Guid guid = Guid.NewGuid();
             ShortGuid sguid1 = guid;
@@ -226,7 +230,7 @@ namespace Ranking.Infrastructure
         /// <param name="id"></param>
         public void DeleteResetPasswordToken(int id)
         {
-            var user = db.Users.Find(id);
+            var user = DB.GetUserById(id); // db.Users.Find(id);
             user.ResetPasswordToken = null;
             db.SaveChanges();
         }

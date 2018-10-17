@@ -12,11 +12,13 @@ namespace Ranking.Infrastructure
     {
         RankContext db;
         BoardManager boardManager;
+        DBOperations DBOper;
 
         public MatchManager(RankContext db)
         {
             this.db = db;
             boardManager = new BoardManager(db);
+            DBOper = new DBOperations(db);
         }
         /// <summary>
         /// 
@@ -42,7 +44,7 @@ namespace Ranking.Infrastructure
                 match.MembersGoalsSplitTeam1 = match.MembersGoalsSplitTeam2;
                 match.MembersGoalsSplitTeam2 = tempMembersGoalsSplitTeam1;
             }
-            db.Match.Add(match);
+            DBOper.DBAdd(match);
             db.SaveChanges();
         }
         /// <summary>
@@ -51,7 +53,7 @@ namespace Ranking.Infrastructure
         /// <param name="match"></param>
         public void DeleteMatch(Match match)
         {
-            db.Match.Remove(match);
+            DBOper.DBRemove(match);
             db.SaveChanges();
         }
         /// <summary>
@@ -60,11 +62,11 @@ namespace Ranking.Infrastructure
         /// <param name="match"></param>
         public void AcceptMatch(Match match)
         {
-            var rank1 = db.Rank.Where(r => r.Uname == match.Team1).SingleOrDefault();
-            var rank2 = db.Rank.Where(r => r.Uname == match.Team2).SingleOrDefault();
+            var rank1 = DBOper.GetRankByName(match.Team1); //db.Rank.Where(r => r.Uname == match.Team1).SingleOrDefault();
+            var rank2 = DBOper.GetRankByName(match.Team2); //db.Rank.Where(r => r.Uname == match.Team2).SingleOrDefault();
 
-            db.Match.Find(match.MatchId).IsFinished = true;
-            db.Match.Find(match.MatchId).Colour = "czerowny";
+            DBOper.GetMatchById(match.MatchId).IsFinished = true;
+            DBOper.GetMatchById(match.MatchId).Colour = "czerwony";
 
             if(match.Team1Score > match.Team2Score)
             {
@@ -87,8 +89,8 @@ namespace Ranking.Infrastructure
             rank1.Goals += match.Team1Score;
             rank2.Goals += match.Team2Score;
 
-            var user1 = db.Users.Where(u => u.Name == match.Team1).SingleOrDefault();
-            var user2 = db.Users.Where(u => u.Name == match.Team2).SingleOrDefault();
+            var user1 = DBOper.GetUserByName(match.Team1);//db.Users.Where(u => u.Name == match.Team1).SingleOrDefault();
+            var user2 = DBOper.GetUserByName(match.Team2);//db.Users.Where(u => u.Name == match.Team2).SingleOrDefault();
 
             string[] value1 = match.MembersGoalsSplitTeam1.ToString().TrimEnd().Split(' ');
             string[] value2 = match.MembersGoalsSplitTeam2.ToString().TrimEnd().Split(' ');
@@ -168,7 +170,7 @@ namespace Ranking.Infrastructure
         public void temp()
         {
             var matches = db.Match.Where(m => m.IsFinished == true).ToList();
-            var ranks = db.Rank.ToList();
+            var ranks = DBOper.DBSelect("Rank") as List<Rank>;//db.Rank.ToList();
 
             for(int i =0; i< ranks.Count; i++)
             {
@@ -189,7 +191,7 @@ namespace Ranking.Infrastructure
         /// </summary>
         public void PlayersPosition()
         {
-            var rank = db.Rank.ToList();
+            var rank = DBOper.DBSelect("Rank") as List<Rank>;//db.Rank.ToList();
 
             rank.Sort((x, y) => x.Points.CompareTo(y.Points));
 
@@ -283,7 +285,7 @@ namespace Ranking.Infrastructure
         /// <returns></returns>
         public bool MatchValidate(string[] names)
         {
-            var matches = db.Match.ToList();
+            var matches = DBOper.DBSelect("Match") as List<Match>; //db.Match.ToList();
             foreach(var m in matches)
             {
                 if (names[0] == m.Team1 && names[1] == m.Team2 ||
@@ -300,7 +302,7 @@ namespace Ranking.Infrastructure
         /// <returns></returns>
         public bool IsPlayedMatch(string[] names, string Uname)
         {
-            var admin = db.Users.Where(a => a.Name == Uname).SingleOrDefault();
+            var admin = DBOper.GetUserByName(Uname); // db.Users.Where(a => a.Name == Uname).SingleOrDefault();
             foreach (var p in names)
             {
                 return p == Uname || admin.IsAdmin;
@@ -317,9 +319,9 @@ namespace Ranking.Infrastructure
             if (db.Rank.Count() > 0)
                 pos = db.Rank.Max(p => p.Position);
             var player = new Rank() { Uname = user.Name, Position = pos + 1, Captain = user.Captain };
-            var User = db.Users.Where(u => u.Name == user.Name).SingleOrDefault();
-            user.IsAccept = true;
-            db.Rank.Add(player);
+            var User = DBOper.GetUserByName(user.Name); // db.Users.Where(u => u.Name == user.Name).SingleOrDefault();
+            User.IsAccept = true;
+            DBOper.DBAdd(player); //db.Rank.Add(player);
             db.SaveChanges();
         }
         /// <summary>
@@ -340,7 +342,7 @@ namespace Ranking.Infrastructure
         {
             Users user = null;
             if (id != 0)
-                user = db.Users.Find(id);
+                user = DBOper.GetUserById(id); // db.Users.Find(id);
 
             List<MatchViewModel> mVM = new List<MatchViewModel>();
             var playedMatches = GetYourMatchesList(user == null ? Helpers.UserName() : user.Name);

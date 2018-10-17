@@ -10,10 +10,12 @@ namespace Ranking.Infrastructure
     public class BoardManager
     {
         RankContext db;
+        DBOperations DB;
 
         public BoardManager(RankContext db)
         {
             this.db = db;
+            DB = new DBOperations(db);
         }
         /// <summary>
         /// 
@@ -23,7 +25,7 @@ namespace Ranking.Infrastructure
         public void AddPost(string text, bool auto = false)
         {
             var Post = new Board() { Author = auto ? "POL-2018" : Helpers.UserName(), PostDate = DateTime.Now, Text = text };
-            db.Board.Add(Post);
+            DB.DBAdd(Post);//db.Board.Add(Post);
             db.SaveChanges();
         }
         /// <summary>
@@ -44,10 +46,10 @@ namespace Ranking.Infrastructure
         /// <param name="post"></param>
         public void DelegatePost(Board post)
         {
-            db.Board.Remove(post);
+            DB.DBRemove(post);//db.Board.Remove(post);
 
             var temp = db.Comment.Where(c => c.Board.PostId == post.PostId).ToList();
-            db.Comment.RemoveRange(temp);
+            //db.Comment.RemoveRange(temp);
 
             db.SaveChanges();
         }
@@ -57,7 +59,7 @@ namespace Ranking.Infrastructure
         /// <param name="comment"></param>
         public void DeleteComment(Comment comment)
         {
-            db.Comment.Remove(comment);
+            DB.DBRemove(comment);//db.Comment.Remove(comment);
             db.SaveChanges();
         }
         /// <summary>
