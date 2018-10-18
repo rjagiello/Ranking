@@ -1,0 +1,40 @@
+﻿@model Ranking.ViewModels.LoginViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="margin-top:150px;">
+    <div style="text-align:center; font-size:xx-large; padding-bottom:20px;">
+        <p><b>Logowanie kibica</b></p>
+    </div>
+    @using (Html.BeginForm("Login", "Account", new { type = Model.userType }, FormMethod.Post, new { @style = "width:400px; margin-left: auto; margin-right: auto;" }))
+    {
+        @Html.AntiForgeryToken()
+        <div id="login-error" style="margin-left:auto; color:red;">
+            @Html.ValidationMessage("loginerror", "")
+        </div>
+        <div class="form-group" style="margin-left:auto;">
+            @Html.LabelFor(o => o.Name, "Nazwa kibica:")
+            @Html.TextBoxFor(o => o.Name, new { @class = "form-control" })
+            <div class="login-validation-message">
+                @Html.ValidationMessageFor(o => o.Name)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(o => o.Password, "Hasło")
+            @Html.PasswordFor(o => o.Password, new { @style = "width: 100%", @class = "form-control" })
+            <div class="login-validation-message">
+                @Html.ValidationMessageFor(o => o.Password)
+            </div>
+        </div>
+
+        <input type="submit" value="Zaloguj" class="btn btn-default" style="height: 40px;" />
+    }
+</div>
+@section Scripts
+{
+    <script src="~/Scripts/jquery-2.2.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}
+

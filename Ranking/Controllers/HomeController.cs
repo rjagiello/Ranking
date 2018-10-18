@@ -107,13 +107,15 @@ namespace Ranking.Controllers
                 ranks = db.RankArch.ToList();
                 cache.Set(CacheManager.RankArchCacheKey, ranks, 60);
             }
-            int[] IdArray = new int[ranks.Count];
-            for (int i = 0; i < ranks.Count; i++)
+            if (ranks.Count() > 0)
             {
-                IdArray[i] = ranks[i].RankArchId;
+                int[] IdArray = new int[ranks.Count];
+                for (int i = 0; i < ranks.Count; i++)
+                {
+                    IdArray[i] = ranks[i].RankArchId;
+                }
+                ViewBag.IdArray = IdArray;
             }
-            ViewBag.IdArray = IdArray;
-
             return View();
         }
 
@@ -154,7 +156,7 @@ namespace Ranking.Controllers
             return PartialView("_RankTable", table);
         }
 
-        public ActionResult MemberList()
+        public ActionResult MembersList()
         {
             var members = db.Member.OrderByDescending(k => k.Goals).ToList();
             int i = 0;

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Ranking.Models.Rank>
+@{
+    ViewBag.Title = "Druzyny";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    [data-title] {
+        position: relative;
+    }
+    [data-title]:hover::before{
+        content: attr(data-title);
+        z-index: 100;
+        position: absolute;
+        bottom: -26px;
+        display: inline-block;
+        padding: 3px 6px;
+        border-radius: 2px;
+        background: #9b9b9b;
+        color: #fff;
+        font-size: 12px;
+        font-family: sans-serif;
+        white-space: nowrap;
+    }
+    [data-title]:hover::after{
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 8px;
+        display: inline-block;
+        color: #fff;
+        border: 8px solid transparent;
+        border-bottom: 8px solid #000;
+    }
+</style>
+
+<div>
+    @if (Model.Any())
+    {
+        <table class="table table-dark table-hover">
+            <tr>
+                <th>Drużyna</th>
+            </tr>
+            @foreach (var rec in Model)
+            {
+                <tr style="cursor:pointer;" onclick="location.href = '@Url.Action("Index", "Profile", new { id = rec.RankId })'">
+                    <td data-title="Kliknij, aby zobaczyć profil"><img style="width:30px;" src="~/Content/Images/@ViewBag.ImageList[rec.RankId]" /> @rec.Uname</td>
+                </tr>
+            }
+        </table>
+    }
+</div>
+

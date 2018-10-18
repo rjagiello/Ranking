@@ -27,7 +27,7 @@ namespace Ranking.Infrastructure
         /// <param name="user"></param>
         public void AddUser(dynamic user)
         {
-            user.Stat = Status.Registration;
+            user.stat = Status.Registration;
             if (user is Users)
             {
                 Users u = user as Users;
@@ -150,7 +150,7 @@ namespace Ranking.Infrastructure
             var user = db.Users.Where(u => u.Name == name).SingleOrDefault();
             if(user.Name != User.Name || user.Captain != User.Captain)
             {
-                user.stat = Status.Modificarion;
+                user.stat = Status.Modification;
                 user.IsAccept = false;
                 user.TempName = User.Name;
                 user.TempCaptain = User.Captain;

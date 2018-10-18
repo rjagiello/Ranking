@@ -1,0 +1,39 @@
+﻿@model Ranking.Models.RoundDate
+
+<div>
+    @using (Html.BeginForm("ChangeNextRoundDate", "Manage", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="form-group col-sm-3" style="width:210px; padding-left:25px;">
+                @Html.LabelFor(o => o.RoundDatetime, "Data kolejnej rundy")
+                @Html.TextBoxFor(o => o.RoundDatetime, new { @class = "form-control", @value = Model.RoundDatetime.ToString("yyyy/MM/dd"), type = "Date" })
+                <div class="login-validation-message">
+                    @Html.ValidationMessageFor(o => o.RoundDatetime)
+                </div>
+            </div>
+            <div class="form-group col-sm-1" style="width:70px; padding-left:10px;">
+                @Html.LabelFor(o => o.Hour, "Godzina")
+                @Html.TextBoxFor(o => o.Hour, new { @class = "form-control" })
+                <div class="login-validation-message">
+                    @Html.ValidationMessageFor(o => o.Hour)
+                </div>
+            </div>
+            <div class="form-group col-sm-1" style="width:70px; padding-left:10px;">
+                @Html.LabelFor(o => o.Min, "Minuta")
+                @Html.TextBoxFor(o => o.Min, new { @class = "form-control" })
+                <div class="login-validation-message">
+                    @Html.ValidationMessageFor(o => o.Min)
+                </div>
+            </div>
+            <div class="form-group col-sm-3" style="width:210px; padding-left:25px;">
+                @Html.LabelFor(o => o.RoundEndDatetime, "Data końca obecnej rundy")
+                @Html.TextBoxFor(o => o.RoundEndDatetime, new { @class = "form-control", @value = Model.RoundDatetime.ToString("yyyy/MM/dd"), type = "Date" })
+                <div class="login-validation-message">
+                    @Html.ValidationMessageFor(o => o.RoundEndDatetime)
+                </div>
+            </div>
+        </div>
+
+        <input type="submit" value="Zapisz" class="btn btn-default" onclick="return confirm('Czy ma pewno zmienić daty?');" style="height:40px;" />
+    }
+</div>

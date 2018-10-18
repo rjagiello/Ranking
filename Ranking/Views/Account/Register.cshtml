@@ -1,0 +1,62 @@
+﻿@model Ranking.ViewModels.RegisterViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <div style="text-align:center; font-size:xx-large; padding-bottom:20px;">
+        <p><b>Rejestracja drużyny</b></p>
+    </div>
+    @using (Html.BeginForm("Register", "Account"))
+    {
+        @Html.AntiForgeryToken()
+        <div id="login-error" style="color:red;">
+            @Html.ValidationMessage("loginerror", "")
+            @Html.ValidationSummary()
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(o => o.Email, "Adres E-mail")
+            @Html.TextBoxFor(o => o.Email, new {  @class = "form-control"})
+            <div class="login-validation-message">
+                @Html.ValidationMessageFor(o => o.Email)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(o => o.Name, "Nazwa drużyny")
+            @Html.TextBoxFor(o => o.Name, new { @class = "form-control" })
+            <div class="login-validation-message">
+                @Html.ValidationMessageFor(o => o.Name)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(o => o.Captain, "Kapitan")
+            @Html.TextBoxFor(o => o.Captain, new { @class = "form-control" })
+            <div class="login-validation-message">
+                @Html.ValidationMessageFor(o => o.Captain)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(o => o.Password, "Hasło")
+            @Html.PasswordFor(o => o.Password, new { @class = "form-control" })
+            <div class="login-validation-message">
+                @Html.ValidationMessageFor(o => o.Password)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(o => o.ConfirmPassword, "Potwierdź hasło")
+            @Html.PasswordFor(o => o.ConfirmPassword, new { @class = "form-control" })
+            <div class="login-validation-message">
+                @Html.ValidationMessageFor(o => o.ConfirmPassword)
+            </div>
+        </div>
+
+        <input type="submit" value="Zarejestruj" class="btn btn-default" style="height:40px;" />
+    }
+</div>
+@section Scripts
+{
+    <script src="~/Scripts/jquery-2.2.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}
+

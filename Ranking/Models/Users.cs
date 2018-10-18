@@ -66,6 +66,6 @@ namespace Ranking.Models
     public enum Status
     {
         Registration,
-        Modificarion
+        Modification
     }
 }

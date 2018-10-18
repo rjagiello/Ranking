@@ -17,9 +17,9 @@ namespace Ranking.Infrastructure
         {
             ISessionManager session = new SessionManager();
             dynamic user = new Users();
-            if (session.Get<Users>(SessionManager.LoginFanSessionKey) != null)
+            if (session.Get<Users>(SessionManager.LoginSessionKey) != null)
             {
-                user = session.Get<Users>(SessionManager.LoginFanSessionKey) as Users;
+                user = session.Get<Users>(SessionManager.LoginSessionKey) as Users;
                 return user.Name;
             }
             else if (session.Get<Fans>(SessionManager.LoginFanSessionKey) != null)

@@ -67,7 +67,7 @@ namespace Ranking.Controllers
             if (ModelState.IsValid)
             {
                 var sha256 = Crypto.SHA256(model.Password);
-                var user = new LoginViewModel() { Name = model.Name, Password = model.Password };
+                var user = new LoginViewModel() { Name = model.Name, Password = sha256 };
                 if (accountManager.Login(user))
                 {
                     accountManager.SetLoginState(true);

@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Ranking.Models.Users>
+@using Ranking.Infrastructure
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Helpers.IsAdmin())
+{
+    <div>
+        @if (Model.Any())
+        {
+            <table class="table table-dark table-hover small">
+                <tr><th style="text-align:center">Lista drużyn</th></tr>
+                <tr>
+                    <th>Drużyna</th>
+                    <th></th>
+                    <th></th>
+                    <th style="text-align:center">Zmiany</th>
+                </tr>
+                @foreach (var rec in Model)
+                {
+                    <tr>
+                        @if (rec.ForgotPassword)
+                        {
+                            <td style="cursor:pointer; color:red;" data-toggle="collapse" data-target="#@rec.UserId">@rec.Name</td>
+                        }
+                        else
+                        {
+                            <td style="cursor:pointer;" data-toggle="collapse" data-target="#@rec.UserId">@rec.Name</td>
+                        }
+                        <td>
+                            <a style="color:grey" class="=btn btn-outline-light" onclick="return confirm('Czy na pewno usunąć drużynę');" href="@Url.Action("DeleteUser", "Manage", new { id= rec.UserId})">Usuń</a>
+                        </td>
+                        @if (rec.IsAccept == false)
+                        {
+                            <td>
+                                <a style="color:grey" class="=btn btn-outline-light" onclick="return confirm('Czy na pewno Zaakceptować drużynę');" href="@Url.Action("AcceptUser", "Manage", new { id= rec.UserId})">Akceptuj</a>
+                            </td>
+                            <td>
+                                @rec.TempCaptain  @rec.TempCaptain
+                            </td>
+                        }
+                    </tr>
+                    <tr class="collapse" id="@rec.UserId">
+                        <td><a style="color:grey" class="btn btn-outline-light" onclick="SetToken(@rec.UserId)"> Ustaw token </a></td>
+                        <td></td>
+                        <td class="@rec.UserId">
+                            @if (rec.ResetPasswordToken != null)
+                            {
+                                <a href="mailto:@ViewBag.TokenList[@rec.UserId]">wyślij</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+            <script defer>
+                function SetToken(id) {
+                    $.ajax({
+                        url: '/Manage/SetToken/' + id,
+                        cache: false,
+                        dataType: "JSON",
+                        success: function (data) {
+                            $("td." + id).children("a").remove();
+                            $("td." + id).append(data);
+                        }
+                    });
+                    return false;
+                }
+            </script>
+        }
+        <hr />
+        @Html.Action("FanList")
+        @{
+            string emails = "";
+            foreach (var m in Model)
+            {
+                emails += "; " + m.Email;
+            }
+        }
+    </div>
+    <hr />
+    @Html.Action("ChangeNextRoundDate")
+
+            <a style="margin-top:50px;" href="mailto:@emails" class="btn btn-default">Wyślij mail do wszystkich</a>
+            <hr />
+            <a style="margin-bottom:20px;" href="@Url.Action("AddCaptainToMember")" class="btn btn-default">Dodaj kapitanów do listy zawodników</a>
+}
+@section Scripts
+{
+    <script src="~/Scripts/jquery-2.2.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

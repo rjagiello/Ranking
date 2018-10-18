@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Ranking.Models.Fans>
+
+<div>
+    @if (Model.Any())
+    {
+        <table class="table table-dark table-hover small">
+            <tr><th style="text-align:center;">Lista Kibiców</th></tr>
+            <tr>
+                <th>Kibic</th>
+                <th></th>
+            </tr>
+            @foreach (var rec in Model)
+            {
+<tr>
+    <td>@rec.Name</td>
+    <td>
+        <a style="color:gray" class="btn btn-outline-light" onclick="return confirm('Czy na pewno usunąć kibica?');" href="@Url.Action("DeleteFan", "Manage", new { id = rec.FanId})">Usuń</a>
+    </td>
+</tr>
+            }
+
+        </table>
+    }
+</div>
