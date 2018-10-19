@@ -1,0 +1,25 @@
+﻿<div style="margin-left:14px;">
+    @using (@Html.BeginForm("FileUpload", "Profile", FormMethod.Post, new { enctype = "multipart/form-data", @class = "row" }))
+    {
+        <input class="btn btn-default col-sm-2" type="button" id="loadfile" value="..." onclick="document.getElementById('file').click();" />
+        <input class="col-sm-2" type="file" accept=".png" name="file" id="file" style="display:none;"/>
+        <input class="btn btn-default col-sm-4" type="submit" disabled value="Zmień" />
+    }
+</div>
+<script>
+    $(document).ready(
+        function () {
+            $('input:file').change(
+                function () {
+                    var numb = $(this)[0].size / 1024 / 1024;
+                    numb = numb.toFixed(2);
+                    if (numb > 2) {
+                        alert('Za duży rozmiar pliku, maksymalnie 2MB');
+                        return;
+                    }
+                    if ($(this).val()) {
+                        $('input:submit').attr('disabled', false);
+                    }
+                });
+        });
+</script>

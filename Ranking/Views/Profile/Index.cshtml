@@ -1,0 +1,138 @@
+﻿@model Ranking.Models.Rank
+@using Ranking.Models
+@using Ranking.Infrastructure
+@{
+    ViewBag.Title = "Druzyny";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Member> members = ViewBag.Members;
+    List<Ranking.ViewModels.MatchViewModel> matches = ViewBag.Matches;
+}
+
+<div style="margin-top:30px;" class="row">
+    <div class="col-md-4">
+        <img style="width:100%; height:100%" src="~/Content/Images/@ViewBag.Path" />
+        @if (Helpers.IsAuthenticated() && Helpers.UserName() == Model.Uname)
+        {
+            @Html.Action("FileUpload")
+            <p style="color:@ViewBag.Colour">@ViewBag.Alert</p>
+        }
+    </div>
+    <div class="col-md-8">
+        <h1>@Model.Uname</h1>
+        <hr />
+        <ul class="list-group">
+            <li class="list-group-item">
+                <b>Kapitan: </b>@Model.Captain
+            </li>
+            <li class="list-group-item">
+                <b>Zawodnicy:</b>
+                <ul>
+                    @foreach (var m in members)
+                    {
+                        if (Helpers.IsAdmin())
+                        {
+                            <li>@m.MName <a class="btn btn-outline-light" onclick="return confirm('Czy na pewno usunąć zawodnika?');" href="@Url.Action("DeleteMember", "UserManage", new { id = m.MemberId})">Usuń</a></li>
+                        }
+                        else
+                        {
+                            <li>@m.MName <span style="float:right" class="badge">Bramki: @m.Goals</span></li>
+                        }
+                    }
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="row" style="margin-top:5px;">
+    <div class="col-md-6" style="overflow:hidden;">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <b>Pozycja w tabeli: </b><span class="badge">@Model.Position</span>
+            </li>
+            <li class="list-group-item">
+                <b>Punkty: </b><span class="badge">@Model.Points</span>
+            </li>
+            <li class="list-group-item">
+                <b>Wygrane mecze w lidze: </b><span class="badge">@Model.Won</span>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-6" style="overflow:hidden;">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <b>Przegrane mecze w lidze: </b><span class="badge">@Model.Lost</span>
+            </li>
+            <li class="list-group-item">
+                <b>Strzelone bramki: </b><span class="badge">@Model.Goals</span>
+            </li>
+            <li class="list-group-item">
+                <b>Stracone bramki: </b><span class="badge">@Model.LostGoals</span>
+            </li>
+        </ul>
+    </div>
+</div>
+<hr />
+@if (!ViewBag.nolist)
+{
+    if (!Helpers.FinishLeague())
+    {
+        <div>
+            <table class="table table-hover small">
+                <tr>
+                    <th colspan="8" style="text-align:center;">Mecze rozegrane</th>
+                </tr>
+                @foreach (var rec in matches)
+                {
+                    if (rec.IsPlayed)
+                    {
+                        <tr>
+                            <td colspan="2" style="text-align:right;">
+                                @rec.Team1
+                            </td>
+                            <td colspan="2" style="text-align:center;">
+                                @rec.Team1Score : @rec.Team2Score
+                            </td>
+                            <td colspan="2" style="text-align:left;">
+                                @rec.Team2
+                            </td>
+                            <td colspan="2" style="text-align:center;">
+                                @rec.Date.ToShortDateString()
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+            <table class="table table-hover small">
+                <tr>
+                    <th colspan="6" style="text-align:center;">Mecze nierozegrane</th>
+                </tr>
+                @foreach (var rec in matches)
+                {
+                    if (!rec.IsPlayed)
+                    {
+                        <tr>
+                            <td colspan="2" style="text-align:center;">
+                                @rec.Team1
+                            </td>
+                            <td colspan="2" style="text-align:center;"></td>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+    }
+}
+else
+{
+    <p style="color:red">@ViewBag.Alert1</p>
+    <p style="color:red">@ViewBag.Alert2</p>
+    <p style="color:red">@ViewBag.Alert3</p>
+    @Html.Action("Members", "UserManage", new { profile = true })
+    <ul>
+        @foreach (var m in members)
+        {
+            <li><b>@m.MName</b></li>
+        }
+    </ul>
+}
+

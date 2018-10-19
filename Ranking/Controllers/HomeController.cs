@@ -72,7 +72,7 @@ namespace Ranking.Controllers
 
         public ActionResult TeamList()
         {
-            string filePath = Server.MapPath(Url.Content("~/Content/Images"));
+            string filePath = Server.MapPath(Url.Content("~/Content/Images/"));
 
             var players = db.Rank.ToList();
 
@@ -107,7 +107,7 @@ namespace Ranking.Controllers
                 ranks = db.RankArch.ToList();
                 cache.Set(CacheManager.RankArchCacheKey, ranks, 60);
             }
-            if (ranks.Count() > 0)
+            if (ranks != null)
             {
                 int[] IdArray = new int[ranks.Count];
                 for (int i = 0; i < ranks.Count; i++)
