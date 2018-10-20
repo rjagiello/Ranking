@@ -79,10 +79,12 @@ namespace Ranking.Controllers
             if (accountManager.GetUserType() == UserType.Admin)
             {
                 ViewBag.UserList = GetUserList(true);
+                model.userType = UserType.Admin;
                 return View("LoginAdmin", model);
             }
             else if (accountManager.GetUserType() == UserType.Fan)
             {
+                model.userType = UserType.Fan;
                 return View("LoginFan", model);
             }
             else if (accountManager.GetUserType() == UserType.Team)
@@ -193,7 +195,7 @@ namespace Ranking.Controllers
         {
             var user = db.Users.Where(u => u.ResetPasswordToken == token).SingleOrDefault();
 
-            if(user !=null)
+            if(user == null)
                 return RedirectToAction("Index", "Home");
 
             accountManager.DeleteResetPasswordToken(user.UserId);
