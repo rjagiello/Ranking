@@ -1,0 +1,14 @@
+﻿@model Ranking.ViewModels.PostViewModel
+
+<div style="padding-top: 10px;">
+    @using (Html.BeginForm("AddPost", "Board", FormMethod.Post))
+    {
+        <div class="form-group">
+            @Html.TextAreaFor(o => o.Text, new { @class = "form-control", @rows = "5", @placeholder = "Twój post", @style = "width:100%" })
+            <div class="login-validation-message">
+                @Html.ValidationMessageFor(o => o.Text)
+            </div>
+        </div>
+        <input type="submit" value="Dodaj" class="btn btn-default" onclick="return confirm('Czy na pewno dodać post?');" style="height:40px;" />
+    }
+</div>

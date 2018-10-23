@@ -16,7 +16,7 @@ namespace Ranking.Infrastructure
         public static string UserName()
         {
             ISessionManager session = new SessionManager();
-            dynamic user = new Users();
+            IUser user;
             if (session.Get<Users>(SessionManager.LoginSessionKey) != null)
             {
                 user = session.Get<Users>(SessionManager.LoginSessionKey) as Users;
@@ -108,6 +108,23 @@ namespace Ranking.Infrastructure
         /// <returns></returns>
         public static bool FinishLeague()
         {
+            ICacheManager cache = new CacheManager();
+            string finish = "";
+            if (cache.IsSet(CacheManager.FinishLeagueCacheKey))
+                finish = cache.Get(CacheManager.FinishLeagueCacheKey) as string;
+            else
+            {
+                finish = FinishLeagueCheck() ? "true" : "false";
+                cache.Set(CacheManager.FinishLeagueCacheKey, finish, 1);
+            }
+            return finish == "true";
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static bool FinishLeagueCheck()
+        {
             RankContext db = new RankContext();
             var users = db.Users.Where(u => u.IsAdmin == false && u.stat == Status.Registration && u.IsAccept == true).ToList();
             var date = db.RoundDate.SingleOrDefault();
@@ -115,7 +132,7 @@ namespace Ranking.Infrastructure
 
             if (DateTime.Now >= date.RoundEndDatetime)
                 return true;
-            foreach(var r in rank)
+            foreach (var r in rank)
                 if (r.Played < users.Count - 1)
                     return false;
             return false;
@@ -198,7 +215,7 @@ namespace Ranking.Infrastructure
             string name = UserName();
             var matches = db.Match.Where(m => m.IsFinished == false && (m.Team1 == name || m.Team2 == name)).ToList();
 
-            foreach(var m in matches)
+            foreach (var m in matches)
             {
                 if (m.NotAddedBy == name)
                     return false;

@@ -18,7 +18,7 @@ namespace Ranking.Infrastructure
     {
         public const string RankingCacheKey = "RankingCacheKey";
         public const string TeamListCacheKey = "TeamListCacheKey";
-        public const string RankArchCacheKey = "RankArchCacheKey";
+        public const string UsersListCacheKey = "UsersListCacheKey";
         public const string FinishLeagueCacheKey = "FinishLeagueCacheKey";
         private Cache cache { get { return HttpContext.Current.Cache; } }
         /// <summary>

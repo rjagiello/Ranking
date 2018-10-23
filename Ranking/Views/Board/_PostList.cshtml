@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Ranking.Models.Comment>
+@using Ranking.Infrastructure
+
+
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+
+<link rel="stylesheet" type="text/css" href="~/Content/Board.css" />
+
+<div style="width:100%" class="container bootstrap snippet">
+    <div class="col-sm-12">
+        <div class="panel panel-white post panel-shadow" style="background-color:white; margin-top:10px;">
+            <div class="post-heading">
+                <div class="pull-left image">
+                    <img class="img-circle avatar" src="~/Content/Images/@ViewBag.ImageList[ViewBag.Author]" />
+                </div>
+                <div class="pull-left meta">
+                    <div class="title h5">
+                        @if (ViewBag.Author == "POL-2018" || ViewBag.Author == "admin")
+                        {
+                            <b style="color:red">@ViewBag.Author</b>
+                        }
+                        else
+                        {
+                            <b>@ViewBag.Author</b>
+                        }
+                        dodał post.
+                    </div>
+                    <h6 class="text-muted time">@ViewBag.Date</h6>
+                </div>
+                @if (Helpers.IsAdmin() || Helpers.UserName() == ViewBag.Author)
+                {
+                    <div style="float:right">
+                        <a onclick="return confirm('Czy na pewno usunąć post?');" href="@Url.Action("DeletePost", "Board", new { id = ViewBag.PostId})" class="btn btn-default">Usuń</a>
+                    </div>
+                }
+            </div>
+            <div class="post-description">
+                <p style="overflow-wrap:normal" ;>@ViewBag.Text</p>
+            </div>
+            <div class="post-footer">
+                <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#@ViewBag.PostId">Komentarze (@Model.Count())</button>
+
+                <div id="@ViewBag.PostId" class="collapse">
+                    @foreach (var c in Model)
+                    {
+                        <ul id="getcomment" class="comments-list">
+                            <li class="comment">
+                                @if (Helpers.IsAdmin() || Helpers.UserName() == c.Author)
+                                {
+                                    <div style="float:right">
+                                        <a onclick="return confirm('Czy na pewno usunąć komentarz?');" href='@Url.Action("DeleteComment", "Board", new { id = c.CommentId})' class="btn btn-default">Usuń</a>
+                                    </div>
+                                }
+                                <div style="margin-left:30px;" class="comment-body">
+                                    <div class="comment-heading">
+                                        <div style="margin-right: 10px;" class="pull-left image">
+                                            <img class="img-circle avatar" src="~/Content/Images/@ViewBag.ImageList[c.Author]" />
+                                        </div>
+                                        <h4 id="@c.CommentId" class="user">@c.Author</h4>
+                                        <h5 class="time">@c.CommentDate</h5>
+                                    </div>
+                                    <script>
+                                        var element = document.getElementById("@c.CommentId")
+                                        if ("@c.Author" == "admin")
+                                            element.style.color = "red";
+                                    </script>
+                                    <p style="overflow-wrap:normal;">@c.Text</p>
+                                </div>
+                            </li>
+                        </ul>
+                    }
+                    <div>
+                        @Html.Action("AddComment", new { id = ViewBag.PostId})
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

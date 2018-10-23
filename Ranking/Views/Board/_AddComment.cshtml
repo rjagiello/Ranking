@@ -1,0 +1,25 @@
+﻿@model Ranking.ViewModels.CommentViewModel
+@using Ranking.Infrastructure
+<div style="padding-top: 10px;">
+    @using (Html.BeginForm("AddComment", "Board", FormMethod.Post, new { @class = "row" }))
+    {
+        if (Helpers.IsAuthenticated() || Helpers.IsFanAuthenticated())
+        {
+        <div class="form-group col-sm-10">
+            @Html.TextAreaFor(o => o.Text, new { @class = "form-control", @rows = "2", @placeholder = "Twój komentarz" })
+            <div class="login-validation-message">
+                @Html.ValidationMessageFor(o => o.Text)
+            </div>
+        </div>
+        <div class="col-sm-1" hidden="hidden">@Html.TextBoxFor(o => o.BoardId)</div>
+
+        <input type="submit" value="Dodaj" class="btn btn-default col-sm-1" onclick="return confirm('Czy na pewno dodać komentarz?');" style="height:40px;" />
+        }
+    }
+</div>
+@section Scripts
+{
+    <script src="~/Scripts/jquery-2.2.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

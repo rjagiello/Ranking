@@ -42,7 +42,7 @@ namespace Ranking.Infrastructure
         /// 
         /// </summary>
         /// <param name="post"></param>
-        public void DelegatePost(Board post)
+        public void DeletePost(Board post)
         {
             db.Board.Remove(post);
 

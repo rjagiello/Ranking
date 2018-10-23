@@ -35,7 +35,7 @@ namespace Ranking.Controllers
             else
             {
                 ranking = db.Rank.OrderBy(r => r.Position).ToList();
-                cache.Set(CacheManager.RankArchCacheKey, ranking, 1);
+                cache.Set(CacheManager.RankingCacheKey, ranking, 1);
             }
             foreach (var r in ranking)
             {
@@ -99,14 +99,8 @@ namespace Ranking.Controllers
 
         public ActionResult ArchivesRank()
         {
-            List<RankArch> ranks;
-            if (cache.IsSet(CacheManager.RankArchCacheKey))
-                ranks = cache.Get(CacheManager.RankArchCacheKey) as List<RankArch>;
-            else
-            {
-                ranks = db.RankArch.ToList();
-                cache.Set(CacheManager.RankArchCacheKey, ranks, 60);
-            }
+            var ranks = db.RankArch.ToList();
+
             if (ranks != null)
             {
                 int[] IdArray = new int[ranks.Count];
@@ -160,7 +154,7 @@ namespace Ranking.Controllers
         {
             var members = db.Member.OrderByDescending(k => k.Goals).ToList();
             int i = 0;
-            foreach(var m in members)
+            foreach (var m in members)
             {
                 m.Lp = ++i;
             }

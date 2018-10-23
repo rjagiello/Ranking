@@ -1,0 +1,125 @@
+﻿@model Ranking.Models.Match
+@using Ranking.Infrastructure
+@{
+    ViewBag.Title = "Mecze";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Helpers.IsAuthenticated() && !Helpers.FinishLeague())
+{
+    if (!Helpers.IsAllAccepted())
+    {
+        <h2 style="text-align:center">Zaakceptuj rozegrane mecze</h2>
+    }
+    else
+    {
+        <div>
+            @using (@Html.BeginForm("SubmitMatch", "Match", FormMethod.Post))
+            {
+                <div id="loginerror" style="color:red; text-align:center">
+                    @Html.ValidationMessage("playererror", "")
+                    <div style="color:#00cc00; margin-top:25px; text-align:center;">@ViewBag.Nortification</div>
+                    @if (TempData["Valid"] != null)
+                    {
+                        if ((bool)TempData["Valid"])
+                        {
+                            <a style="margin-bottom:10px" class="btn btn-default" href='mailto:@TempData["Email"]?subject=League 2018&body=Prośba o akceptację meczu: @TempData["Score"]'>Wyślij prośbę o akceptację</a>
+                            TempData["Valid"] = false;
+                        }
+                    }
+                </div>
+
+                <table id="Mtable" class="table table-hover small">
+                    <tr>
+                        <th colspan="2" style="text-align:center;">Twoja drużyna</th>
+                        <th colspan="2" style="text-align:center;">Wynik</th>
+                        <th colspan="2" style="text-align:center;">Drużyna przeciwna</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align:center;">
+                            @Html.DropDownListFor(o => o.Team1, ViewBag.UserList as SelectList, "--Wybierz--", new { @style = "width: 100px" })
+                            <div class="login-validation-message">
+                                @Html.ValidationMessageFor(o => o.Team1)
+                            </div>
+                            <div style="margin-top:20px;">Kolor drużyny @Html.DropDownListFor(o => o.Colour, ViewBag.ColourList as SelectList, "--Wybierz--", new { @style = "width: 100px" })</div>
+                            <div class="login-validation-message">
+                                @Html.ValidationMessageFor(o => o.Colour)
+                            </div>
+                        </td>
+                        <td colspan="1" style="text-align:center;">
+                            @Html.TextBoxFor(o => o.Team1Score, new { @style = "width: 50px", @maxlenght = "2", @id = "TeamGoals" })
+                            <div class="login-validation-message">
+                                @Html.ValidationMessageFor(o => o.Team1Score)
+                            </div>
+                            <div hidden="hidden">@Html.TextBoxFor(o => o.MembersGoalsSplitTeam1)</div>
+                            <div hidden="hidden">@Html.TextBoxFor(o => o.MemberGoals)</div>
+                            <div class="login-validation-message">
+                                @Html.ValidationMessageFor(o => o.MemberGoals)
+                            </div>
+                            <div class="login-validation-message">
+                                @Html.ValidationMessageFor(o => o.MembersGoalsSplitTeam1)
+                            </div>
+                        </td>
+                        <td colspan="1" style="text-align:center">
+                            @Html.TextBoxFor(o => o.Team2Score, new { @style = "width: 50px", @maxlenght = "2" })
+                            <div class="login-validation-message">
+                                @Html.ValidationMessageFor(o => o.Team2Score)
+                            </div>
+                        </td>
+                        <td colspan="2" style="text-align:center;">
+                            @Html.DropDownListFor(o => o.Team2, ViewBag.UserList as SelectList, "--Wybierz--", new { @style = "width: 100px" })
+                            <div class="login-validation-message">
+                                @Html.ValidationMessageFor(o => o.Team2)
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <input style="margin-left:10px;" onclick="return confirm('Czy na pewno dodać mecz?');" type="submit" value="Dodaj" class="btn btn-default" />
+            }
+            <div style="padding-bottom:20px;"></div>
+        </div>
+    }
+}
+<hr style="color:black" />
+@Html.Action("MatchList")
+
+@section Scripts
+{
+    <script src="~/Scripts/jquery-2.2.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+    <script>
+        $('#Team1').on('change', function () {
+            $("table#Mtable tr.id").remove();
+            $.ajax({
+                url: '/Match/GetMembers?name=' + this.value,
+                cache: false,
+                dataType: "JSON",
+                success: function (data) {
+                    $.each(data, function (i) {
+                        $("#Mtable").append(data[i]);
+                    })
+                }
+            });
+        });
+
+        function SumInputs() {
+            var tab = document.getElementsByClassName('member');
+            var val = 0;
+            var splitval = "";
+            $.each(tab, function (i) {
+                if (tab[i].value == 'NaN')
+                    tab[i].value = 0;
+                val += parseInt(tab[i].value, 10);
+                splitval += tab[i].id + "|" + tab[i].value + " ";
+            });
+            document.getElementById('MemberGoals').value = val;
+            document.getElementById('TeamGoals').value = val;
+            document.getElementById('MembersGoalsSplitTeam1').value = splitval;
+            document.getElementById('TeamGoals').focus();
+        };
+    </script>
+
+}
+

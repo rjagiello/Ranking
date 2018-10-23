@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Ranking.Models.Board>
+@{
+    ViewBag.Title = "Tablica";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Dictionary<string, string> list = new Dictionary<string, string>();
+    list = ViewBag.ImageList;
+}
+@using Ranking.Infrastructure
+
+@if (Helpers.IsAuthenticated() || Helpers.IsFanAuthenticated())
+{
+    <button style="margin-top:10px;" type="button" class="btn btn-default" data-toggle="collapse" data-target="#demo">Dodaj Post</button>
+    <div id="demo" class="collapse">
+        @Html.Action("AddPost")
+    </div>
+}
+
+@if (Model.Any())
+{
+    <div>
+        @foreach (var i in Model)
+        {
+            @Html.Action("PostList", new { id = i.PostId, list = list })
+        }
+    </div>
+    <div class="form-inline">
+        @if (Request.QueryString["skip"] != "0" && Request.QueryString["skip"] != null)
+        {
+            <a href="@Url.Action("NewPost", "Board", new { skip = ViewBag.Skip})" style="margin-bottom:10px" class="btn btn-default">Pokaż nowsze posty</a>
+        }
+        @if (ViewBag.End == false)
+        {
+            <a href="@Url.Action("NewPost", "Board", new { skip = ViewBag.Skip + 10})" style="margin-bottom:10px; float:right" class="btn btn-default">Pokaż starsze posty</a>
+        }
+    </div>
+}
+else
+{
+    <p style="font-size:larger; padding-top:100px; padding-bottom:100px; text-align:center;">Brak postów</p>
+}
+
+@section Scripts
+{
+    <script src="~/Scripts/jquery-2.2.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

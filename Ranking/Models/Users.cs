@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ranking.Models
 {
-    public class Users
+    public class Users : IUser
     {
         [Key]
         public int UserId { get; set; }
@@ -49,7 +49,7 @@ namespace Ranking.Models
         public virtual Users Users { get; set; }
     }
 
-    public class Fans
+    public class Fans : IUser
     {
         [Key]
         public int FanId { get; set; }
@@ -67,5 +67,12 @@ namespace Ranking.Models
     {
         Registration,
         Modification
+    }
+    public interface IUser
+    {
+        string Name { get; set; }
+        string Password { get; set; }
+        string Email { get; set; }
+        Status stat { get; set; }
     }
 }

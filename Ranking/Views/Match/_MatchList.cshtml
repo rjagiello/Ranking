@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Ranking.Models.Match>
+@using Ranking.Infrastructure
+
+<div>
+    @if (Model.Any())
+    {
+        <table class="table table-hover small">
+            <tr>
+                <th colspan="2" style="color:#ff471a; text-align:center;">Drużyna Czerowna</th>
+                <th colspan="2" style="text-align:center;">Wynik</th>
+                <th colspan="2" style="color:#1a75ff; text-align:center;">Drużyna Niebieska</th>
+                <th style="text-align:center;">Data</th>
+                <th style="width:170px;">Status</th>
+            </tr>
+            @foreach (var rec in Model)
+            {
+                <tr>
+                    <td colspan="2" style="text-align:center">
+                        @rec.Team1
+                    </td>
+                    <td>
+                        @rec.Team1Score
+                    </td>
+                    <td style="text-align:right">
+                        @rec.Team2Score
+                    </td>
+                    <td colspan="2" style="text-align:center">
+                        @rec.Team2
+                    </td>
+                    <td style="text-align:center">@rec.Date.ToShortDateString()</td>
+
+                    @if (Helpers.IsAdmin() || Helpers.AllowAccept(rec.NotAddedBy))
+                    {
+                        if (!rec.IsFinished)
+                        {
+                            <td style="width:200px">
+                                <div id="acceptmatch">
+                                    @Html.Action("AcceptMatch", "Match", new { id = rec.MatchId })
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>Zaakceptowane</td>
+                        }
+                        if (!rec.IsFinished)
+                        {
+                            <td>
+                                <div id="deletematch">
+                                    <a style="color:gray" onclick="return confirm('Czy na pewno usunąć mecz?');" href="@Url.Action("DeleteMatch", "Match", new { id = rec.MatchId})">Usuń</a>
+                                </div>
+                            </td>
+                        }
+                    }
+                    else
+                    {
+                        if (rec.IsFinished)
+                        {
+                            <td>Zaakceptowane</td>
+
+                        }
+                        else
+                        {
+                            <td>Czeka na akceptację</td>
+                        }
+                    }
+                </tr>
+            }
+        </table>
+    }
+</div>

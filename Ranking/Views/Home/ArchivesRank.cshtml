@@ -1,0 +1,20 @@
+﻿
+@{
+    int[] ArrayID = ViewBag.IdArray;
+    ViewBag.Title = "Archiwum";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if(ArrayID == null)
+{
+    <p style="font-size:larger; padding-top:100px; padding-bottom:100px; text-align:center;">Brak tabel w archiwum</p>
+}
+else
+{
+    foreach(var i in ArrayID)
+    {
+        @Html.Action("RankTable", new { id = i})
+        <a style="color:gray" href="@Url.Action("ArchivesMatches", "Home", new { id = i})">Mecze</a>
+    }
+}
+

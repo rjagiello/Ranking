@@ -1,0 +1,45 @@
+﻿@model Ranking.ViewModels.AcceptMatchViewModel
+
+@using (Html.BeginForm("AcceptMatch", "Match", FormMethod.Post, new { @onsubmit = "return ConfirmValid(@Model.MatchId, @ViewBag.Team2Score);" }))
+{
+    <div hidden="hidden">@Html.TextBoxFor(o => o.Team2)</div>
+    <div hidden="hidden">@Html.TextBoxFor(o => o.MatchId)</div>
+    <div hidden="hidden">@Html.TextBoxFor(o => o.Team2Score)</div>
+    <div hidden="hidden">@Html.TextBoxFor(o => o.MembersGoalsSplit, new { @id = "MemberGSplit" + Model.MatchId})</div>
+    <div hidden="hidden">@Html.TextBoxFor(o => o.MembersGoals, new { @id="MemberG" + Model.MatchId})</div>
+    <div id="login-error" style="color:red; text-align:center">@Html.ValidationMessage("accepterror", "")</div>
+
+    <table>
+        @foreach (var m in ViewBag.Members)
+        {
+            <tr class="id">
+                <td>@m.MName<input style="width: 50px; float:right;" type="number" min="0" max="10" value="0" onchange="SumAInputs(@Model.MatchId)" class="member @Model.MatchId" id="@m.MemberId"/></td>
+            </tr>
+        }
+    </table>
+
+    <input style="color:grey" onclick="return ConfirmValid(@Model.MatchId, @Model.Team2Score)" type="submit" value="Akceptuj"/>
+}
+<script>
+    function SumAInputs(id) {
+        var tab = document.getElementsByClassName('member ' + id);
+        var val = 0;
+        var splitval = "";
+        $.each(tab, function (i) {
+            if (tab[i].value == 'NaN')
+                tab[i].value = 0;
+            val += parseInt(tab[i].value, 10);
+            splitval += tab[i].id + "|" + tab[i].value + " ";
+        });
+        document.getElementById('MemberG' + id).value = val;
+        document.getElementById('MemberGSplit' + id).value = splitval;
+    };
+    function ConfirmValid(id, goals) {
+        var val = parseInt(document.getElementById('MemberG' + id).value, 10);
+        if (val != goals) {
+            alert('Suma strzelonych bramek przez graczy musi być równa liczbie strzelonych bramek przez drużynę');
+            return false;
+        }
+        else return confirm("Czy na pewno zaakceptować mecz?");
+    };
+</script>

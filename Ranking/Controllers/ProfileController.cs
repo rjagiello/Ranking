@@ -30,7 +30,7 @@ namespace Ranking.Controllers
             ViewBag.Alert3 = alert3 ? "Wszystkie Twoje mecze muszą być zaakceptowane, żeby dodać zawodnika" : "";
             ViewBag.nolist = nolist;
 
-            if (alert1)
+            if (alert)
                 ViewBag.Alert = success ? "Obrazek wgrany pomyślnie" : "Zły format lub zbyt wysoki rozmiar pliku";
             else
                 ViewBag.Alert = "";

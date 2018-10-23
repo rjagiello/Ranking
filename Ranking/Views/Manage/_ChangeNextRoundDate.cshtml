@@ -6,7 +6,7 @@
         <div class="row">
             <div class="form-group col-sm-3" style="width:210px; padding-left:25px;">
                 @Html.LabelFor(o => o.RoundDatetime, "Data kolejnej rundy")
-                @Html.TextBoxFor(o => o.RoundDatetime, new { @class = "form-control", @value = Model.RoundDatetime.ToString("yyyy/MM/dd"), type = "Date" })
+                @Html.TextBoxFor(o => o.RoundDatetime, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
                 <div class="login-validation-message">
                     @Html.ValidationMessageFor(o => o.RoundDatetime)
                 </div>
@@ -27,7 +27,7 @@
             </div>
             <div class="form-group col-sm-3" style="width:210px; padding-left:25px;">
                 @Html.LabelFor(o => o.RoundEndDatetime, "Data końca obecnej rundy")
-                @Html.TextBoxFor(o => o.RoundEndDatetime, new { @class = "form-control", @value = Model.RoundDatetime.ToString("yyyy/MM/dd"), type = "Date" })
+                @Html.TextBoxFor(o => o.RoundEndDatetime, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
                 <div class="login-validation-message">
                     @Html.ValidationMessageFor(o => o.RoundEndDatetime)
                 </div>

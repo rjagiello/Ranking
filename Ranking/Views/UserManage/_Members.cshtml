@@ -1,0 +1,18 @@
+﻿@model Ranking.Models.Member
+
+<div>
+    @using (Html.BeginForm("Members", "UserManage", new { profile = ViewBag.Profile }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.LabelFor(o => o.MName, "Wpisz nazwę zawodnika")
+            @Html.TextBoxFor(o => o.MName, new { @class = "form-control" })
+            <div class="login-validation-message">
+                @Html.ValidationMessageFor(o => o.MName)
+            </div>
+        </div>
+
+        <input type="submit" value="Dodaj" onclick="return confirm('Czy na pewno dodać zawodnika?');" class="btn btn-default" style="height:40px;"/>
+    }
+</div>

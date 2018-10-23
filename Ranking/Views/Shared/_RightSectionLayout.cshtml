@@ -12,7 +12,7 @@
                 <a class="btn btn-default" href="@Url.Action("YourMatches", "UserManage")">Twoje mecze</a>
             </div>
             <div class="well">
-                <a class="btn btn-default" href="@Url.Action("Index", "Profile")">Twój profil</a>
+                <a class="btn btn-default" href="@Url.Action("Index", "Profile", new { name = Helpers.UserName(), nolist = true })">Twój profil</a>
             </div>
         }
     }

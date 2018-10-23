@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Ranking.Models.Ranks>
+    
+<div>
+    <div style="font-weight:600">Runda @ViewBag.RoundNumber</div>
+    <div style="font-weight:600">Data: @ViewBag.From - @ViewBag.To</div>
+
+    <table class="table table-hover small">
+        <tr>
+            <th>Pozycja</th>
+            <th>Drużyna</th>
+            <th>Wygrane</th>
+            <th>Przegrane</th>
+            <th>Rozegrane</th>
+            <th>Bramki strzelone</th>
+            <th>Bramki stracone</th>
+            <th>Punkty</th>
+        </tr>
+        @foreach (var rec in Model)
+        {
+            <tr>
+                <td>@rec.Position</td>
+                <td>@rec.Uname</td>
+                <td>@rec.Won</td>
+                <td>@rec.Lost</td>
+                <td>@rec.Played</td>
+                <td>@rec.Goals</td>
+                <td>@rec.LostGoals</td>
+                <td>@rec.Points</td>
+            </tr>
+        }
+    </table>
+</div>

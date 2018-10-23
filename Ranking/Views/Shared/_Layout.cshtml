@@ -11,6 +11,7 @@
     <title>League 2018</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" type="image/png" href="~/Content/Images/icon.png" sizes="32x32" />
     <link rel="stylesheet" href="~/Content/bootstrap.min.css" /> <!--3.3.7-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -26,7 +27,7 @@
                 @if (Helpers.IsAnyMatch() && leaders != null)
                 {
                     <h3><b>Liderzy</b></h3>
-                    <p><!--<img src="~/Content/Images/medal1.png"--> /> @leaders[0]</p>
+                    <p><!--<img src="~/Content/Images/medal1.png" />--> @leaders[0]</p>
                     <p><!--<img src="~/Content/Images/medal2.png" />--> @leaders[1]</p>
                     <p><!--<img src="~/Content/Images/medal3.png" />--> @leaders[2]</p>
                     <hr />

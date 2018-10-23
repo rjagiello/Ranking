@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Ranking.ViewModels.MatchViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Ranking.Infrastructure
+
+@if (Helpers.FinishLeague())
+{
+    <div style="margin-top:40px; text-align:center;">
+        <h2>Koniec ligi</h2>
+    </div>
+}
+else
+{
+    if (Helpers.IsAuthenticated() && !Helpers.IsNotAccept())
+    {
+        <div>
+            @if (Model.Any())
+            {
+                <table class="table table-hover small">
+                    <tr>
+                        <th colspan="6" style="text-align:center;">Mecze rozegrane</th>
+
+                        <th style="text-align:center">Data</th>
+                    </tr>
+                    @foreach (var rec in Model)
+                    {
+                        if (rec.IsPlayed)
+                        {
+                            <tr>
+                                <td colspan="2" style="text-align:right;">
+                                    @rec.Team1
+                                </td>
+                                <td colspan="2" style="text-align:center;">
+                                    @rec.Team1Score : @rec.Team2Score
+                                </td>
+                                <td colspan="2" style="text-align:left;">
+                                    @rec.Team2
+                                </td>
+                                <td colspan="2" style="text-align:center;">
+                                    @rec.Date.ToShortDateString()
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+                <table class="table table-hover small">
+                    <tr>
+                        <th colspan="6" style="text-align:center;">Mecze nierozegrane</th>
+                    </tr>
+                    @foreach (var rec in Model)
+                    {
+                        if (!rec.IsPlayed)
+                        {
+                            <tr>
+                                <td colspan="2" style="text-align:center;">
+                                    @rec.Team1
+                                </td>
+                                <td colspan="2" style="text-align:center;">
+                                    <a href="mailto:@rec.Email?subject=League 2018 [@rec.Team1 : @rec.Team2]&body=Zapraszam na mecz ligowy z drużyną @Helpers.UserName()" class="btn btn-default">Zaproś do gry</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            }
+        </div>
+    }
+}
+

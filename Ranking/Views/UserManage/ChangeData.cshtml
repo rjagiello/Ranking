@@ -1,0 +1,70 @@
+﻿@model Ranking.ViewModels.UserChangeViewModel
+@using Ranking.Infrastructure
+@using Ranking.Models
+@{
+    List<Member> members = ViewBag.Members;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Helpers.IsAuthenticated())
+{
+    <div style="padding-left:10px; padding-right:10px; padding-top: 10px;">
+        @using (Html.BeginForm("ChangeData", "UserManage"))
+        {
+            @Html.AntiForgeryToken()
+
+            <div id="login-error" style="color:red">
+                @Html.ValidationMessage("NameError", "")
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(o => o.Name, "Nazwa drużyny")
+                @Html.TextBoxFor(o => o.Name, new { @class = "form-control"})
+                <div class="login-validation-message">
+                    @Html.ValidationMessageFor(o => o.Name)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(o => o.Captain, "Kapitan")
+                @Html.TextBoxFor(o => o.Captain, new { @class = "form-control" })
+                <div class="login-validation-message">
+                    @Html.ValidationMessageFor(o => o.Captain)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(o => o.Password, "Nowe Hasło")
+                @Html.PasswordFor(o => o.Password, new { @class = "form-control" })
+                <div class="login-validation-message">
+                    @Html.ValidationMessageFor(o => o.Password)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(o => o.ConfirmPassword, "Potwierdź nowe hasło")
+                @Html.PasswordFor(o => o.ConfirmPassword, new { @class = "form-control" })
+                <div class="login-validation-message">
+                    @Html.ValidationMessageFor(o => o.ConfirmPassword)
+                </div>
+            </div>
+
+            <input type="submit" value="Zapisz" class="btn btn-default" style="height: 40px" />
+        }
+        <br />
+        <hr />
+
+        <p style="color:red">@ViewBag.Alert</p>
+        <p style="color:red">@ViewBag.Alert2</p>
+        <p style="color:red">@ViewBag.Alert3</p>
+        @Html.Action("Members", "UserManage")
+        <ul>
+            @foreach (var m in members)
+            {
+                <li><b>@m.MName</b> &nbsp; Bramki: @m.Goals</li>
+            }
+        </ul>
+    </div>
+}
+@section Scripts
+{
+    <script src="~/Scripts/jquery-2.2.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

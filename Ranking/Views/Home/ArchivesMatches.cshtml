@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Ranking.Models.MatchArched>
+@{
+    ViewBag.Title = "Archiwum";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="text-align:center; margin-top:20px; margin-bottom:20px;">
+    <h3>Runda @ViewBag.RoundNumber</h3>
+</div>
+
+<div>
+    @if (Model.Any())
+    {
+        <table class="table table-hover small">
+            <tr>
+                <th colspan="2" style="color:#ff471a; text-align:center;">Drużyna Czerowna</th>
+                <th colspan="2" style="text-align:center;">Wynik</th>
+                <th colspan="2" style="color:#1a75ff; text-align:center;">Drużyna Niebieska</th>
+                <th style="text-align:center;">Data</th>
+            </tr>
+            @foreach (var rec in Model)
+            {
+                <tr>
+                    <td colspan="2" style="text-align:center">
+                        @rec.Team1
+                    </td>
+                    <td>
+                        @rec.Team1Score
+                    </td>
+                    <td style="text-align:right">
+                        @rec.Team2Score
+                    </td>
+                    <td colspan="2" style="text-align:center">
+                        @rec.Team2
+                    </td>
+                    <td style="text-align:center">@rec.Date.ToShortDateString()</td>
+                </tr>
+            }
+        </table>
+    }
+</div>
+

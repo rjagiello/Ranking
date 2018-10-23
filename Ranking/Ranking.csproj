@@ -125,10 +125,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Board.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\icon.png" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -156,9 +158,12 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MatchController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\UserManageController.cs" />
     <Compile Include="DAL\RankContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -222,6 +227,19 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.min.js.map" />
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Profile\_UploadImage.cshtml" />
+    <Content Include="Views\Match\Index.cshtml" />
+    <Content Include="Views\Match\_MatchList.cshtml" />
+    <Content Include="Views\Match\_AcceptMatch.cshtml" />
+    <Content Include="Views\UserManage\ChangeData.cshtml" />
+    <Content Include="Views\UserManage\_Members.cshtml" />
+    <Content Include="Views\UserManage\YourMatches.cshtml" />
+    <Content Include="Views\Board\Index.cshtml" />
+    <Content Include="Views\Board\_PostList.cshtml" />
+    <Content Include="Views\Board\_AddPost.cshtml" />
+    <Content Include="Views\Board\_AddComment.cshtml" />
+    <Content Include="Views\Home\ArchivesRank.cshtml" />
+    <Content Include="Views\Home\ArchivesMatches.cshtml" />
+    <Content Include="Views\Home\_RankTable.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -231,7 +249,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Images\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201810162119338_InitialCreate.resx">

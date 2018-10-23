@@ -25,7 +25,7 @@ namespace Ranking.Infrastructure
         /// 
         /// </summary>
         /// <param name="user"></param>
-        public void AddUser(dynamic user)
+        public void AddUser(IUser user)
         {
             user.stat = Status.Registration;
             if (user is Users)
@@ -34,7 +34,7 @@ namespace Ranking.Infrastructure
                 db.Users.Add(u);
             }
             else if (user is Fans)
-                db.Fans.Add(user);
+                db.Fans.Add(user as Fans);
             db.SaveChanges();
         }
         /// <summary>
@@ -237,7 +237,7 @@ namespace Ranking.Infrastructure
         /// <returns></returns>
         public bool Login(LoginViewModel user)
         {
-            dynamic userT;
+            IUser userT;
             if(userType == UserType.Fan)
             {
                 userT = db.Fans.FirstOrDefault(u => u.Name == user.Name && u.Password == user.Password);
@@ -331,7 +331,7 @@ namespace Ranking.Infrastructure
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public dynamic GetUser(LoginViewModel user)
+        public IUser GetUser(LoginViewModel user)
         {
             if (userType == UserType.Team || userType == UserType.Admin)
                 return db.Users.Where(u => u.Name == user.Name && u.Password == user.Password).SingleOrDefault();
@@ -342,14 +342,14 @@ namespace Ranking.Infrastructure
         /// 
         /// </summary>
         /// <param name="user"></param>
-        public void Authentication(dynamic user)
+        public void Authentication(IUser user)
         {
             if(loginState == LoginState.Log_on)
             {
                 if (user is Fans)
-                    session.Set<Fans>(SessionManager.LoginFanSessionKey, user);
+                    session.Set<Fans>(SessionManager.LoginFanSessionKey, user as Fans);
                 else
-                    session.Set<Users>(SessionManager.LoginSessionKey, user);
+                    session.Set<Users>(SessionManager.LoginSessionKey, user as Users);
             }
             else if(loginState == LoginState.Log_off)
             {
