@@ -29,7 +29,7 @@ namespace Ranking.Controllers
             cache = new CacheManager();
         }
 
-        public ActionResult Index(int skip = 0, bool newPost = false)
+        public ActionResult Index(int skip = 0, bool newPost = false, bool newComment = false)
         {
             ViewBag.End = false;
             var posts = db.Board.OrderByDescending(p => p.PostDate).ToList();
@@ -43,6 +43,11 @@ namespace Ranking.Controllers
                 imagesList = cache.Get(CacheManager.UsersListCacheKey) as Dictionary<string, string>;
                 if (newPost)
                     imagesList.Add(posts.FirstOrDefault().Author, posts.FirstOrDefault().Author);
+                if (newComment)
+                {
+                    var comments = db.Comment.OrderByDescending(c => c.CommentDate).FirstOrDefault();
+                    imagesList.Add(comments.Author, comments.Author);
+                }
             }
             else
             {
@@ -135,7 +140,7 @@ namespace Ranking.Controllers
                 return RedirectToAction("Index", "Home");
 
             boardManager.AddComment(model.BoardId, model.Text);
-            return RedirectToAction("Index", "Board");
+            return RedirectToAction("Index", "Board", new { skip = false, newPost = false, newComment = true });
         }
 
         public ActionResult DeletePost(int id)
