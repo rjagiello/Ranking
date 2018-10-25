@@ -55,10 +55,15 @@ namespace Ranking.Controllers
             {
                 bool notValid = false;
 
-                if(accountManager.IsDuplicateName(model.Name, true))
+                if(!accountManager.IsDuplicateName(model.Name, true))
                 {
                     notValid = true;
                     ModelState.AddModelError("NameError", "Drużyna o podanej nazwie istnieje");
+                }
+                if(accountManager.isDuplicateMember(model.Captain))
+                {
+                    notValid = true;
+                    ModelState.AddModelError("NameError", "Zawodnik o podanej nazwie należy już do drużyny");
                 }
                 if(!notValid)
                 {

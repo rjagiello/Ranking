@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Ranking.Models.Comment>
 @using Ranking.Infrastructure
 
-
+@{ string ImageAvatar = ViewBag.Author + ".png";}
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
 
 <link rel="stylesheet" type="text/css" href="~/Content/Board.css" />
@@ -11,7 +11,7 @@
         <div class="panel panel-white post panel-shadow" style="background-color:white; margin-top:10px;">
             <div class="post-heading">
                 <div class="pull-left image">
-                    <img class="img-circle avatar" src="~/Content/Images/@ViewBag.ImageList[ViewBag.Author]" />
+                    <img class="img-circle avatar" src="~/Content/Images/@ImageAvatar" onerror="this.onload = null; this.src='/Content/Images/default.png';"/>
                 </div>
                 <div class="pull-left meta">
                     <div class="title h5">
@@ -43,6 +43,7 @@
                 <div id="@ViewBag.PostId" class="collapse">
                     @foreach (var c in Model)
                     {
+                        string avatar = c.Author + ".png";
                         <ul id="getcomment" class="comments-list">
                             <li class="comment">
                                 @if (Helpers.IsAdmin() || Helpers.UserName() == c.Author)
@@ -54,7 +55,7 @@
                                 <div style="margin-left:30px;" class="comment-body">
                                     <div class="comment-heading">
                                         <div style="margin-right: 10px;" class="pull-left image">
-                                            <img class="img-circle avatar" src="~/Content/Images/@ViewBag.ImageList[c.Author]" />
+                                            <img class="img-circle avatar" src="~/Content/Images/@avatar" onerror="this.onload = null; this.src='/Content/Images/default.png';"/>
                                         </div>
                                         <h4 id="@c.CommentId" class="user">@c.Author</h4>
                                         <h5 class="time">@c.CommentDate</h5>

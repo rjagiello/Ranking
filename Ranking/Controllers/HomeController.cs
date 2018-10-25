@@ -72,27 +72,7 @@ namespace Ranking.Controllers
 
         public ActionResult TeamList()
         {
-            string filePath = Server.MapPath(Url.Content("~/Content/Images/"));
-
             var players = db.Rank.ToList();
-
-            Dictionary<int, string> imagesList;
-
-            if (cache.IsSet(CacheManager.TeamListCacheKey))
-                imagesList = cache.Get(CacheManager.TeamListCacheKey) as Dictionary<int, string>;
-            else
-            {
-                imagesList = new Dictionary<int, string>();
-                foreach (var p in players)
-                {
-                    if (System.IO.File.Exists(filePath + p.Uname + ".png"))
-                        imagesList.Add(p.RankId, p.Uname + ".png");
-                    else
-                        imagesList.Add(p.RankId, "default.png");
-                }
-                cache.Set(CacheManager.TeamListCacheKey, imagesList, 5);
-            }
-            ViewBag.ImageList = imagesList;
 
             return View(players);
         }

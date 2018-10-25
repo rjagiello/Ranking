@@ -10,12 +10,40 @@
             </button>
             <a class="navbar-brand" href="@Url.Action("Index", "Home")">League</a>
         </div>
+        <style>
+            .badge1 {
+                position: relative;
+            }
+
+                .badge1[data-badge]:after {
+                    content: attr(data-badge);
+                    position: absolute;
+                    top: 4px;
+                    right: -1px;
+                    font-size: .7em;
+                    background: red;
+                    color: white;
+                    width: 18px;
+                    height: 18px;
+                    text-align: center;
+                    line-height: 18px;
+                    border-radius: 50%;
+                    box-shadow: 0 0 1px #333;
+                }
+        </style>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul id="actives" class="nav navbar-nav">
                 <li class="active"><a href="@Url.Action("Index", "Home")">Ranking</a></li>
                 <li><a href="@Url.Action("TeamList", "Home")">Drużyny</a></li>
                 <li><a href="@Url.Action("MembersList", "Home")">Zawodnicy</a></li>
-                <li><a href="@Url.Action("Index", "Match")">Mecze</a></li>
+                @if (Helpers.MatchNotification() > 0)
+                {
+                    <li><a class="badge1" data-badge="@Helpers.MatchNotification().ToString()" href="@Url.Action("Index", "Match")">Mecze</a></li>
+                }
+                else
+                {
+                    <li><a href="@Url.Action("Index", "Match")">Mecze</a></li>
+                }
                 <li><a href="@Url.Action("ArchivesRank", "Home")">Archiwum</a></li>
                 <li><a href="@Url.Action("Index", "Board")">Tablica</a></li>
                 <li><a href="@Url.Action("Regulations", "Home")">Regulamin</a></li>
@@ -25,8 +53,9 @@
                 {
                     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                     {
+                        string avatar = @Helpers.UserName() + ".png";
                         <li style="display:block; padding: 15px 15px; color:white;">
-                            @Helpers.UserName() &nbsp;
+                            <img style="height:30px;margin-bottom: -15px;margin-top: -15px;" class="img-circle avatar" src="~/Content/Images/@avatar" onerror="this.onload = null; this.src='/Content/Images/default.png';" /> &nbsp; @Helpers.UserName() &nbsp;
                             <a style="color:wheat" href="javascript:document.getElementById('logoutForm').submit()"><span class="glyphicon glyphicon-log-out"></span> Wyloguj</a>
                         </li>
                     }

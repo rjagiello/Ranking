@@ -153,6 +153,20 @@ namespace Ranking.Infrastructure
         /// 
         /// </summary>
         /// <returns></returns>
+        public static int MatchNotification()
+        {
+            RankContext db = new RankContext();
+            string name = UserName();
+            var matches = db.Match.Where(m => m.Team1 == name || m.Team2 == name).Where(m =>m.IsFinished == false && m.NotAddedBy == name).ToList();
+
+            if (matches == null || matches.Count == 0)
+                return 0;
+            return matches.Count;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public static bool IsArchAdded()
         {
             RankContext db = new RankContext();

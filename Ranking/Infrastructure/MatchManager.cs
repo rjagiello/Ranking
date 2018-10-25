@@ -105,7 +105,7 @@ namespace Ranking.Infrastructure
                     int result = match.Team1Score - mod;
                     foreach (var m in user1.Members)
                         m.Goals += result / count;
-                    user1.Members.Where(m => m.IsCaptain == true).SingleOrDefault().Goals += int.Parse(value1[1]);
+                    user1.Members.Where(m => m.IsCaptain == true).SingleOrDefault().Goals +=mod;
                 }
             }
             else
@@ -129,7 +129,7 @@ namespace Ranking.Infrastructure
                     int result = match.Team2Score - mod;
                     foreach (var m in user2.Members)
                         m.Goals += result / count;
-                    user2.Members.Where(m => m.IsCaptain == true).SingleOrDefault().Goals += int.Parse(value1[1]);
+                    user2.Members.Where(m => m.IsCaptain == true).SingleOrDefault().Goals += mod;
                 }
             }
             else

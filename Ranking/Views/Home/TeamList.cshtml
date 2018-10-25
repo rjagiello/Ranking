@@ -42,8 +42,9 @@
             </tr>
             @foreach (var rec in Model)
             {
+                string avatar = rec.Uname + ".png";
                 <tr style="cursor:pointer;" onclick="location.href = '@Url.Action("Index", "Profile", new { id = rec.RankId })'">
-                    <td data-title="Kliknij, aby zobaczyć profil"><img style="width:30px;" src="~/Content/Images/@ViewBag.ImageList[rec.RankId]" /> @rec.Uname</td>
+                    <td data-title="Kliknij, aby zobaczyć profil"><img style="width:30px;" src="~/Content/Images/@avatar" onerror="this.onload = null; this.src='/Content/Images/default.png';"/> @rec.Uname</td>
                 </tr>
             }
         </table>

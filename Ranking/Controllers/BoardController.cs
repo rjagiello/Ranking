@@ -29,59 +29,10 @@ namespace Ranking.Controllers
             cache = new CacheManager();
         }
 
-        public ActionResult Index(int skip = 0, bool newPost = false, bool newComment = false)
+        public ActionResult Index(int skip = 0)
         {
             ViewBag.End = false;
             var posts = db.Board.OrderByDescending(p => p.PostDate).ToList();
-
-            string filePath = Server.MapPath(Url.Content("~/Content/Images/"));
-
-            Dictionary<string, string> imagesList;
-
-            if (cache.IsSet(CacheManager.UsersListCacheKey))
-            {
-                imagesList = cache.Get(CacheManager.UsersListCacheKey) as Dictionary<string, string>;
-                if (newPost)
-                    imagesList.Add(posts.FirstOrDefault().Author, posts.FirstOrDefault().Author);
-                if (newComment)
-                {
-                    var comments = db.Comment.OrderByDescending(c => c.CommentDate).FirstOrDefault();
-                    imagesList.Add(comments.Author, comments.Author);
-                }
-            }
-            else
-            {
-                //var teams = db.Users.ToList();
-                //var fans = db.Fans.ToList();
-
-                //List<IUser> users = new List<IUser>();
-                //foreach (var t in teams)
-                //    users.Add(t);
-                //foreach (var f in fans)
-                //    users.Add(f);
-                List<string> users = new List<string>();
-
-                foreach (var u in posts)
-                {
-                    users.Add(u.Author);
-                    foreach (var c in u.Comment)
-                    {
-                        users.Add(c.Author);
-                    }
-                }
-
-                imagesList = new Dictionary<string, string>();
-                //imagesList.Add("POL-2018", "default.png");
-                foreach (var p in users.Distinct())
-                {
-                    if (System.IO.File.Exists(filePath + p + ".png"))
-                        imagesList.Add(p, p + ".png");
-                    else
-                        imagesList.Add(p, "default.png");
-                }
-                cache.Set(CacheManager.UsersListCacheKey, imagesList, 1);
-            }
-            ViewBag.ImageList = imagesList;
 
             if (!(posts.Count() > skip + 5))
                 ViewBag.End = true;
@@ -98,7 +49,7 @@ namespace Ranking.Controllers
             return RedirectToAction("Index", new { skip = skip });
         }
         
-        public ActionResult PostList(int id, Dictionary<string, string> list)
+        public ActionResult PostList(int id)
         {
             var boards = db.Board.Where(b => b.PostId == id).SingleOrDefault();
 
@@ -108,7 +59,6 @@ namespace Ranking.Controllers
             ViewBag.Date = boards.PostDate;
             ViewBag.Text = boards.Text;
             ViewBag.PostId = id;
-            ViewBag.ImageList = list;
 
             return PartialView("_PostList", comments);
         }
@@ -125,7 +75,7 @@ namespace Ranking.Controllers
                 return RedirectToAction("Index", "Home");
 
             boardManager.AddPost(model.Text);
-            return RedirectToAction("Index", "Board", new { skip = false, newPost = true});
+            return RedirectToAction("Index", "Board");
         }
 
         public ActionResult AddComment(int id)
@@ -140,7 +90,7 @@ namespace Ranking.Controllers
                 return RedirectToAction("Index", "Home");
 
             boardManager.AddComment(model.BoardId, model.Text);
-            return RedirectToAction("Index", "Board", new { skip = false, newPost = false, newComment = true });
+            return RedirectToAction("Index", "Board");
         }
 
         public ActionResult DeletePost(int id)
