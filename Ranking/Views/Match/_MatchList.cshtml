@@ -14,7 +14,16 @@
             </tr>
             @foreach (var rec in Model)
             {
-                <tr>
+                string bcolour = "";
+                if (rec.IsFinished)
+                {
+                    bcolour = "white";
+                }
+                else
+                {
+                    bcolour = "#ffd8d8";
+                }
+                <tr style="background-color:@bcolour">
                     <td colspan="2" style="text-align:center">
                         @rec.Team1
                     </td>
