@@ -55,7 +55,7 @@
                     {
                         string avatar = @Helpers.UserName() + ".png";
                         <li style="display:block; padding: 15px 15px; color:white;">
-                            <img style="height:30px;margin-bottom: -15px;margin-top: -15px;" class="img-circle avatar" src="~/Content/Images/@avatar" onerror="this.onload = null; this.src='/Content/Images/default.png';" /> &nbsp; @Helpers.UserName() &nbsp;
+                            <img style="height:30px; width:30px; margin-bottom: -15px;margin-top: -15px;" class="img-circle avatar" src="~/Content/Images/@avatar" onerror="this.onload = null; this.src='/Content/Images/default.png';" /> &nbsp; @Helpers.UserName() &nbsp;
                             <a style="color:wheat" href="javascript:document.getElementById('logoutForm').submit()"><span class="glyphicon glyphicon-log-out"></span> Wyloguj</a>
                         </li>
                     }
