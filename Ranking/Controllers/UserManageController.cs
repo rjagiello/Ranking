@@ -55,7 +55,7 @@ namespace Ranking.Controllers
             {
                 bool notValid = false;
 
-                if(!accountManager.IsDuplicateName(model.Name, true))
+                if(accountManager.IsDuplicateName(model.Name, true))
                 {
                     notValid = true;
                     ModelState.AddModelError("NameError", "Drużyna o podanej nazwie istnieje");
@@ -72,6 +72,7 @@ namespace Ranking.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
+            ViewBag.Members = accountManager.GetMembers();
             return View(model);
         }
 
@@ -82,7 +83,7 @@ namespace Ranking.Controllers
         }
 
         [HttpPost]
-        public ActionResult Members(Member model, bool profile = false)
+        public ActionResult MembersPost(Member model, bool profile = false)
         {
             string action = profile ? "Index" : "ChangeData";
             string Controller = profile ? "Profile" : "UserManage";

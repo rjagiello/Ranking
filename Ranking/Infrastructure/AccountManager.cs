@@ -135,7 +135,8 @@ namespace Ranking.Infrastructure
         /// <returns></returns>
         public bool isDuplicateMember(string name)
         {
-            var members = db.Member.Where(m => m.MName == name);
+            string uname = Helpers.UserName();
+            var members = db.Member.Where(m => m.MName == name && m.Users.Name != uname);
             if (members.Count() > 0)
                 return true;
             return false;
@@ -188,7 +189,19 @@ namespace Ranking.Infrastructure
                 user.Captain = user.TempCaptain;
                 var member = user.Members.Where(u => u.IsCaptain == true).SingleOrDefault();
                 if (member != null)
+                {
+                    string tempMemberName = member.MName;
+                    int tempMemberGoals = member.Goals;
+                   
+                    var tempmember = user.Members.Where(u => u.MName == user.TempCaptain).SingleOrDefault();
+                    if (tempmember != null)
+                    {
+                        tempmember.MName = tempMemberName;
+                        member.Goals = tempmember.Goals;
+                        tempmember.Goals = tempMemberGoals;
+                    }
                     member.MName = user.TempCaptain;
+                }
             }
             foreach(var mn in match)
             {
@@ -283,8 +296,8 @@ namespace Ranking.Infrastructure
         /// <returns></returns>
         public bool IsDuplicateName(string name, bool change = false, bool isFan = false)
         {
-            if (change)
-                return Helpers.UserName() != name;
+            if (change && Helpers.UserName() == name)
+                return false;
             if(isFan)
             {
                 var userF = db.Fans.Where(u => u.Name == name);

@@ -81,7 +81,7 @@ namespace Ranking.Controllers
         {
             var ranks = db.RankArch.ToList();
 
-            if (ranks != null)
+            if (ranks != null || ranks.Count == 0)
             {
                 int[] IdArray = new int[ranks.Count];
                 for (int i = 0; i < ranks.Count; i++)

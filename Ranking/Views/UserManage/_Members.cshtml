@@ -1,7 +1,7 @@
 ﻿@model Ranking.Models.Member
 
 <div>
-    @using (Html.BeginForm("Members", "UserManage", new { profile = ViewBag.Profile }))
+    @using (Html.BeginForm("MembersPost", "UserManage", new { profile = ViewBag.Profile }))
     {
         @Html.AntiForgeryToken()
 
