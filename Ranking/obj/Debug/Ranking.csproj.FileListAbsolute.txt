@@ -51,3 +51,8 @@ C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\obj\Debug\Ranking.p
 C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\obj\Debug\Ranking.Migrations.InitialCreate.resources
 C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\obj\Debug\Ranking.csproj.GenerateResource.Cache
 C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\obj\Debug\Ranking.Migrations.first.resources
+C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\bin\Glimpse.Ado.dll
+C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\bin\Glimpse.AspNet.dll
+C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\bin\Glimpse.Core.dll
+C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\bin\Glimpse.EF6.dll
+C:\Users\Władcs\Source\Repos\MyFirstProject\Ranking\Ranking\bin\Glimpse.Mvc5.dll
